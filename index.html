@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Садик Сокровищ</title>
+<style>
+*{box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(#8ee7ff,#baf7a1);
+  color:#2d2416;
+  overflow:hidden;
+}
+#game{
+  max-width:520px;
+  margin:0 auto;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  background:linear-gradient(#94e9ff 0 18%,#b7f095 18% 100%);
+}
+.top{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+  padding:8px;
+  background:rgba(255,247,205,.9);
+}
+.stat{
+  background:#fff9db;
+  border:2px solid #ffd45e;
+  border-radius:14px;
+  padding:8px 4px;
+  text-align:center;
+  font-weight:900;
+  font-size:13px;
+}
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+  padding:0 8px 8px;
+  background:rgba(255,247,205,.7);
+}
+button{
+  border:0;
+  border-radius:14px;
+  padding:10px 8px;
+  font-weight:900;
+  background:linear-gradient(#fff5a6,#ffd24a);
+  box-shadow:0 4px 0 #c99018;
+  color:#33240d;
+}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #c99018}
+.good{background:linear-gradient(#d9ffc8,#63dc61);box-shadow:0 4px 0 #2f9e2f}
+.blue{background:linear-gradient(#dff6ff,#86d9ff);box-shadow:0 4px 0 #3ca4d4}
+.red{background:linear-gradient(#ffb9b0,#ff6155);box-shadow:0 4px 0 #be332c;color:white}
+#message{
+  margin:8px;
+  padding:8px;
+  min-height:36px;
+  background:rgba(255,255,255,.8);
+  border:2px solid #ffd45e;
+  border-radius:14px;
+  text-align:center;
+  font-weight:900;
+  font-size:13px;
+}
+.field{
+  flex:1;
+  overflow:auto;
+  padding:0 8px 8px;
+}
+#plots{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  padding-bottom:8px;
+}
+@media(min-width:430px){#plots{grid-template-columns:repeat(3,1fr)}}
+.plot{
+  min-height:145px;
+  background:linear-gradient(160deg,#a96e31,#754516);
+  border:3px solid #653811;
+  border-radius:20px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  padding:7px;
+}
+.plot.dry{background:linear-gradient(160deg,#a7855b,#6a5a44)}
+.plot.selected{outline:4px solid #fff28a}
+.plot:before{
+  content:"";
+  position:absolute;
+  left:-15%;
+  right:-15%;
+  top:42%;
+  height:5px;
+  background:rgba(65,35,10,.35);
+  box-shadow:0 18px 0 rgba(65,35,10,.35),0 -18px 0 rgba(255,255,255,.12);
+  transform:rotate(-4deg);
+}
+.plot>*{position:relative;z-index:2}
+.plotTop{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  color:white;
+  text-shadow:0 1px 2px #000;
+  font-size:11px;
+  font-weight:900;
+}
+.emoji{
+  font-size:46px;
+  filter:drop-shadow(0 4px 4px rgba(0,0,0,.3));
+}
+.ready{animation:bob 1s infinite}
+.empty{
+  color:#ffe9aa;
+  font-weight:900;
+  text-align:center;
+  text-shadow:0 1px 2px #000;
+}
+.progress{
+  width:90%;
+  height:12px;
+  border-radius:99px;
+  background:rgba(0,0,0,.35);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.4);
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#71ff5c,#ffe957,#ff9c38);
+}
+.tags{
+  min-height:24px;
+  display:flex;
+  gap:4px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.tag{
+  background:rgba(255,255,255,.85);
+  border-radius:99px;
+  padding:1px 5px;
+  font-size:17px;
+}
+.plotActions{
+  display:flex;
+  gap:4px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.plotActions button{
+  font-size:11px;
+  padding:7px 6px;
+  border-radius:11px;
+}
+.bottom{
+  max-height:42dvh;
+  background:rgba(255,248,218,.95);
+  border-top:3px solid #dba949;
+  border-radius:18px 18px 0 0;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+}
+.invTitle{
+  display:flex;
+  justify-content:space-between;
+  font-weight:900;
+  font-size:13px;
+}
+#inventory{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  min-height:78px;
+  padding-bottom:4px;
+}
+.card{
+  min-width:88px;
+  max-width:88px;
+  background:#fffdf0;
+  border:2px solid #edcf7a;
+  border-radius:16px;
+  padding:6px;
+  text-align:center;
+  position:relative;
+}
+.seed{background:#efffe8;border-color:#91db70}
+.card.selected{outline:3px solid #ffb42c}
+.icon{font-size:26px}
+.name{font-size:10px;font-weight:900;height:25px;overflow:hidden}
+.count{font-size:12px;font-weight:900;color:#76440f}
+.heart{
+  position:absolute;
+  right:4px;
+  top:3px;
+}
+.modal{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  z-index:20;
+}
+.modal.show{display:flex}
+.panel{
+  width:100%;
+  max-width:500px;
+  max-height:92dvh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  background:#fff6d5;
+  border:3px solid #d99d31;
+  border-radius:24px;
+}
+.panelHead{
+  padding:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(#fff2a6,#ffd04e);
+  font-weight:900;
+}
+.panelBody{
+  overflow:auto;
+  padding:10px;
+}
+.shopItem{
+  background:#fffdf0;
+  border:2px solid #edcf7a;
+  border-radius:18px;
+  padding:9px;
+  margin-bottom:9px;
+}
+.shopTop{display:flex;gap:8px;align-items:center}
+.shopIcon{font-size:34px;width:42px;text-align:center}
+.shopName{font-weight:900}
+.shopText{font-size:12px;line-height:1.3;margin:6px 0}
+.meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px;
+  font-size:11px;
+  opacity:.85;
+}
+.shopItem button{width:100%;margin-top:7px}
+#thief{
+  position:absolute;
+  z-index:30;
+  left:50%;
+  top:34%;
+  transform:translate(-50%,-50%);
+  background:#252025;
+  color:white;
+  border:3px solid #fff18a;
+  border-radius:24px;
+  padding:14px;
+  text-align:center;
+  display:none;
+  box-shadow:0 14px 30px rgba(0,0,0,.35);
+}
+#thief.show{display:block;animation:shake .6s infinite}
+#gift{
+  position:absolute;
+  z-index:25;
+  font-size:46px;
+  display:none;
+  filter:drop-shadow(0 5px 8px rgba(0,0,0,.3));
+}
+#gift.show{display:block;animation:bob 1s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes shake{0%,100%{transform:translate(-50%,-50%) rotate(-2deg)}50%{transform:translate(-50%,-50%) rotate(2deg)}}
+</style>
+</head>
+<body>
+<div id="game">
+  <div class="top">
+    <div class="stat">🪙 <span id="coins">50</span></div>
+    <div class="stat">🌱 <span id="plotCount">4</span>/12</div>
+    <div class="stat">📅 День <span id="day">1</span></div>
+  </div>
+
+  <div class="buttons">
+    <button id="shopBtn">🏪 Магазин</button>
+    <button id="saveBtn" class="blue">💾 Сохранить</button>
+    <button id="newBtn" class="red">🔄 Новая</button>
+  </div>
+
+  <div id="message">Добро пожаловать в Садик Сокровищ!</div>
+
+  <div class="field">
+    <div id="plots"></div>
+  </div>
+
+  <div class="bottom">
+    <div class="actions">
+      <button id="sellBtn" class="good">💰 Продать всё</button>
+      <button id="waterBtn" class="blue">💧 Полить всё</button>
+      <button id="fertBtn">✨ Удобрить</button>
+    </div>
+    <div class="invTitle">
+      <span>🎒 Инвентарь</span>
+      <span>двойной тап по урожаю = ❤️</span>
+    </div>
+    <div id="inventory"></div>
+  </div>
+
+  <div id="thief">
+    <div style="font-size:52px">🥷</div>
+    <b>Ночной Воришка!</b><br>
+    Нажми, пока не украл урожай<br>
+    <b id="thiefTime">5</b>
+    <br><button class="red" id="catchThief">Прогнать!</button>
+  </div>
+
+  <div id="gift">🎁</div>
+
+  <div class="modal" id="shopModal">
+    <div class="panel">
+      <div class="panelHead">
+        <span>🏪 Магазин</span>
+        <button class="red" id="closeShop">Закрыть</button>
+      </div>
+      <div class="panelBody" id="shopList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+const SAVE='sadik_sokrovishch_save_v2';
+
+const plants={
+ carrot:{name:'Морковка Бодрячок',emoji:'🥕',type:'single',seedCost:10,grow:18,sell:18,rarity:'обычная',desc:'Быстрая морковка с зелёной ботвой.'},
+ strawberry:{name:'Сахарная Клубника',emoji:'🍓',type:'multi',seedCost:25,grow:35,fruit:22,sell:20,rarity:'обычная',desc:'Красная ягода с блёстками. Даёт плоды снова и снова.'},
+ sunflower:{name:'Лунный Подсолнух',emoji:'🌻',type:'single',seedCost:60,grow:55,sell:120,rarity:'редкая',desc:'Жёлтый цветок с голубым свечением.'},
+ cactus:{name:'Кактус-Страж',emoji:'🌵',type:'multi',seedCost:90,grow:70,fruit:36,sell:45,rarity:'редкая',desc:'Милый кактус с глазами. На нём не появляются жуки.'},
+ pumpkin:{name:'Тыква-Копилка',emoji:'🎃',type:'single',seedCost:140,grow:85,sell:300,rarity:'эпическая',desc:'Оранжевая тыква с золотой трещиной. Иногда даёт бонус.'},
+ mint:{name:'Радужная Мята',emoji:'🌿',type:'multi',seedCost:220,grow:65,fruit:45,sell:80,rarity:'эпическая',desc:'Ускоряет соседние грядки.'},
+ rose:{name:'Кристальная Роза',emoji:'💎',type:'multi',seedCost:400,grow:120,fruit:70,sell:250,rarity:'легендарная',desc:'Голубая кристальная роза. Иногда даёт двойной цветок.'},
+ berry:{name:'Золотая Ягода',emoji:'🟡',type:'single',seedCost:700,grow:140,sell:1600,rarity:'легендарная',desc:'Самый дорогой одноразовый урожай.'}
+};
+const ids=Object.keys(plants);
+
+function emptyPlot(){
+ return {plant:null,progress:0,ready:false,fruitProgress:0,fruitReady:false,dry:false,weeds:false,bugs:false,snail:0,last:Date.now()};
+}
+function defaultState(){
+ return {
+  coins:50,day:1,plotCount:4,lastDay:Date.now(),
+  seeds:{},harvest:{},heart:{},plots:[emptyPlot(),emptyPlot(),emptyPlot(),emptyPlot()],
+  watering:false,scarecrow:false,fertilizer:0,sunUntil:0,goldUntil:0
+ };
+}
+
+let state=defaultState();
+let selectedSeed=null;
+let fertilizeMode=false;
+let thiefTimer=null;
+let thiefLeft=5;
+let lastTap={id:null,time:0};
+
+const $=id=>document.getElementById(id);
+
+function msg(t){$('message').textContent=t}
+function save(silent){
+ localStorage.setItem(SAVE,JSON.stringify(state));
+ if(!silent)msg('Прогресс сохранён 💾');
+}
+function load(){
+ try{
+  const raw=localStorage.getItem(SAVE);
+  if(raw){
+   state=JSON.parse(raw);
+   while(state.plots.length<state.plotCount)state.plots.push(emptyPlot());
+  }
+ }catch(e){state=defaultState()}
+}
+function coin(n){state.coins=Math.max(0,Math.floor(state.coins+n))}
+function sound(type){
+ try{
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const o=ctx.createOscillator();
+  const g=ctx.createGain();
+  const map={buy:650,plant:420,harvest:760,sell:880,error:160,thief:110};
+  o.frequency.value=map[type]||440;
+  o.type=type==='error'||type==='thief'?'sawtooth':'sine';
+  g.gain.value=.05;
+  o.connect(g);g.connect(ctx.destination);
+  o.start();
+  o.stop(ctx.currentTime+.12);
+ }catch(e){}
+}
+
+function render(){
+ renderTop();
+ renderPlots();
+ renderInventory();
+ renderShop();
+ $('waterBtn').style.display=state.watering?'block':'none';
+ $('fertBtn').textContent='✨ Удобрить ('+state.fertilizer+')';
+}
+function renderTop(){
+ $('coins').textContent=state.coins;
+ $('plotCount').textContent=state.plotCount;
+ $('day').textContent=state.day;
+}
+function stageEmoji(id,p){
+ const pl=plants[id];
+ if(!p.ready){
+  if(p.progress<pl.grow*.33)return '🌰';
+  if(p.progress<pl.grow*.66)return '🌱';
+ }
+ return pl.emoji;
+}
+function plotStatus(p){
+ if(!p.plant)return 'пустая';
+ if(p.snail>0)return 'улитка';
+ if(p.weeds)return 'сорняки';
+ if(p.bugs)return 'жуки';
+ if(p.dry)return 'сухая';
+ if(p.ready){
+  const pl=plants[p.plant];
+  if(pl.type==='single')return 'готово';
+  return p.fruitReady?'плод готов':'растёт плод';
+ }
+ return 'растёт';
+}
+function renderPlots(){
+ const box=$('plots');
+ box.innerHTML='';
+ for(let i=0;i<state.plotCount;i++){
+  const p=state.plots[i]||emptyPlot();
+  state.plots[i]=p;
+  const div=document.createElement('div');
+  div.className='plot'+(p.dry?' dry':'');
+  if(fertilizeMode)div.className+=' selected';
+  let html='<div class="plotTop"><span>Грядка '+(i+1)+'</span><span>'+plotStatus(p)+'</span></div>';
+  if(!p.plant){
+   html+='<div class="empty">Пустая грядка<br>выбери семена</div>';
+   html+='<div class="progress"><div class="bar" style="width:0%"></div></div>';
+   html+='<div class="tags"></div><div class="plotActions"></div>';
+  }else{
+   const pl=plants[p.plant];
+   let percent=pl.type==='multi'&&p.ready ? (p.fruitProgress/(pl.fruit||30))*100 : (p.progress/pl.grow)*100;
+   percent=Math.max(0,Math.min(100,percent));
+   html+='<div class="emoji '+((p.ready&&(pl.type==='single'||p.fruitReady))?'ready':'')+'">'+stageEmoji(p.plant,p)+'</div>';
+   html+='<div class="progress"><div class="bar" style="width:'+percent+'%"></div></div>';
+   html+='<div class="tags">';
+   if(p.weeds)html+='<span class="tag" data-act="weeds">🌾</span>';
+   if(p.bugs)html+='<span class="tag" data-act="bugs">🐞</span>';
+   if(p.dry)html+='<span class="tag">💧?</span>';
+   if(p.snail>0)html+='<span class="tag" data-act="snail">🐌×'+p.snail+'</span>';
+   html+='</div><div class="plotActions">';
+   if(pl.type==='single'&&p.ready)html+='<button data-act="harvest">Собрать</button>';
+   if(pl.type==='multi'&&p.fruitReady)html+='<button data-act="fruit">Плод</button>';
+   if(pl.type==='multi')html+='<button class="red" data-act="uproot">Выкорч.</button>';
+   html+='</div>';
+  }
+  div.innerHTML=html;
+  div.onclick=e=>plotClick(i,e);
+  box.appendChild(div);
+ }
+}
+function renderInventory(){
+ const inv=$('inventory');
+ inv.innerHTML='';
+ ids.forEach(id=>{
+  const c=state.seeds[id]||0;
+  if(c>0){
+   const card=document.createElement('div');
+   card.className='card seed'+(selectedSeed===id?' selected':'');
+   card.innerHTML='<div class="icon">🌰</div><div class="name">Семена<br>'+plants[id].name+'</div><div class="count">×'+c+'</div>';
+   card.onclick=()=>{
+    selectedSeed=selectedSeed===id?null:id;
+    fertilizeMode=false;
+    msg(selectedSeed?'Выбраны семена: '+plants[id].name:'Семена отменены');
+    render();
+   };
+   inv.appendChild(card);
+  }
+ });
+ ids.forEach(id=>{
+  const c=state.harvest[id]||0;
+  if(c>0){
+   const h=state.heart[id]||0;
+   const card=document.createElement('div');
+   card.className='card';
+   card.innerHTML='<div class="icon">'+plants[id].emoji+'</div><div class="name">'+plants[id].name+'</div><div class="count">×'+c+'</div>'+(h>0?'<div class="heart">❤️'+h+'</div>':'');
+   card.onclick=()=>{
+    const now=Date.now();
+    if(lastTap.id===id && now-lastTap.time<450){
+      toggleHeart(id);
+      lastTap={id:null,time:0};
+    }else{
+      lastTap={id,time:now};
+      msg('Нажми ещё раз быстро, чтобы поставить/убрать ❤️');
+    }
+   };
+   inv.appendChild(card);
+  }
+ });
+ if(!inv.innerHTML)inv.innerHTML='<div style="font-weight:900;padding:12px">Пока пусто. Купи семена в магазине.</div>';
+}
+function renderShop(){
+ const list=$('shopList');
+ if(!list)return;
+ let html='';
+ ids.forEach(id=>{
+  const p=plants[id];
+  html+=`
+  <div class="shopItem">
+    <div class="shopTop">
+      <div class="shopIcon">${p.emoji}</div>
+      <div>
+        <div class="shopName">${p.name}</div>
+        <div>${p.rarity} • ${p.type==='single'?'одноразовое':'многократное'}</div>
+      </div>
+    </div>
+    <div class="shopText">${p.desc}</div>
+    <div class="meta">
+      <div>Семена: ${p.seedCost} 🪙</div>
+      <div>Рост: ${p.grow} сек</div>
+      <div>Продажа: ${p.sell} 🪙</div>
+      <div>${p.type==='multi'?'Плод каждые '+p.fruit+' сек':'Грядка очищается'}</div>
+    </div>
+    <button onclick="buySeed('${id}')">Купить семена</button>
+  </div>`;
+ });
+ html+=`
+ <div class="shopItem">
+  <div class="shopName">🌱 Новая грядка</div>
+  <div class="shopText">Цена растёт. Максимум 12 грядок.</div>
+  <button onclick="buyPlot()">Купить за ${plotPrice()} 🪙</button>
+ </div>
+ <div class="shopItem">
+  <div class="shopName">💧 Лейка</div>
+  <div class="shopText">Открывает кнопку “Полить всё”.</div>
+  <button onclick="buyWater()">Купить за 120 🪙</button>
+ </div>
+ <div class="shopItem">
+  <div class="shopName">🧍 Пугало</div>
+  <div class="shopText">Уменьшает шанс появления воришки.</div>
+  <button onclick="buyScare()">Купить за 250 🪙</button>
+ </div>
+ <div class="shopItem">
+  <div class="shopName">✨ Удобрение</div>
+  <div class="shopText">Ускоряет одну выбранную грядку.</div>
+  <button onclick="buyFert()">Купить за 80 🪙</button>
+ </div>`;
+ list.innerHTML=html;
+}
+function plotPrice(){return 80+(state.plotCount-4)*55}
+
+window.buySeed=function(id){
+ const p=plants[id];
+ if(state.coins<p.seedCost){msg('Не хватает монет');sound('error');return}
+ coin(-p.seedCost);
+ state.seeds[id]=(state.seeds[id]||0)+1;
+ msg('Куплены семена: '+p.name);
+ sound('buy');
+ save(true);render();
+}
+window.buyPlot=function(){
+ if(state.plotCount>=12){msg('Уже максимум грядок');sound('error');return}
+ const price=plotPrice();
+ if(state.coins<price){msg('Не хватает монет');sound('error');return}
+ coin(-price);
+ state.plotCount++;
+ state.plots.push(emptyPlot());
+ msg('Куплена новая грядка!');
+ sound('buy');
+ save(true);render();
+}
+window.buyWater=function(){
+ if(state.watering){msg('Лейка уже куплена');return}
+ if(state.coins<120){msg('Не хватает монет');sound('error');return}
+ coin(-120);state.watering=true;
+ msg('Лейка куплена!');
+ sound('buy');save(true);render();
+}
+window.buyScare=function(){
+ if(state.scarecrow){msg('Пугало уже куплено');return}
+ if(state.coins<250){msg('Не хватает монет');sound('error');return}
+ coin(-250);state.scarecrow=true;
+ msg('Пугало куплено!');
+ sound('buy');save(true);render();
+}
+window.buyFert=function(){
+ if(state.coins<80){msg('Не хватает монет');sound('error');return}
+ coin(-80);state.fertilizer++;
+ msg('Куплено удобрение!');
+ sound('buy');save(true);render();
+}
+
+function plotClick(i,e){
+ const p=state.plots[i];
+ const act=e.target.dataset.act;
+ if(act==='weeds'){p.weeds=false;msg('Сорняк убран 🌾');save(true);render();return}
+ if(act==='bugs'){p.bugs=false;msg('Жуки прогнаны 🐞');save(true);render();return}
+ if(act==='snail'){p.snail--;if(p.snail<=0){p.snail=0;msg('Улитка убежала 🐌')}else msg('Ещё '+p.snail+' нажатия');save(true);render();return}
+ if(act==='harvest'){harvestSingle(i);return}
+ if(act==='fruit'){harvestFruit(i);return}
+ if(act==='uproot'){uproot(i);return}
+ if(fertilizeMode){applyFert(i);return}
+ if(!p.plant){plantSeed(i);return}
+ msg('Грядка занята');
+}
+function plantSeed(i){
+ if(!selectedSeed){msg('Выбери семена в инвентаре');sound('error');return}
+ if((state.seeds[selectedSeed]||0)<=0){msg('Нет семян');sound('error');return}
+ state.seeds[selectedSeed]--;
+ state.plots[i]=emptyPlot();
+ state.plots[i].plant=selectedSeed;
+ msg('Посажено: '+plants[selectedSeed].name);
+ sound('plant');
+ if(state.seeds[selectedSeed]<=0)selectedSeed=null;
+ save(true);render();
+}
+function harvestSingle(i){
+ const p=state.plots[i], id=p.plant;
+ state.harvest[id]=(state.harvest[id]||0)+1;
+ if(id==='pumpkin'&&Math.random()<.35){
+  const b=30+Math.floor(Math.random()*60);
+  coin(b);
+  msg('Тыква дала бонус +'+b+' монет!');
+ }else msg('Урожай собран: '+plants[id].name);
+ state.plots[i]=emptyPlot();
+ sound('harvest');
+ save(true);render();
+}
+function harvestFruit(i){
+ const p=state.plots[i], id=p.plant;
+ let add=1;
+ if(id==='rose'&&Math.random()<.25)add=2;
+ state.harvest[id]=(state.harvest[id]||0)+add;
+ p.fruitReady=false;
+ p.fruitProgress=0;
+ msg(add>1?'Двойной цветок!':'Плод собран: '+plants[id].name);
+ sound('harvest');
+ save(true);render();
+}
+function uproot(i){
+ const p=state.plots[i];
+ if(confirm('Выкорчевать '+plants[p.plant].name+'?')){
+  state.plots[i]=emptyPlot();
+  msg('Грядка очищена');
+  save(true);render();
+ }
+}
+function applyFert(i){
+ const p=state.plots[i];
+ if(state.fertilizer<=0){msg('Нет удобрения');return}
+ if(!p.plant){msg('Нечего удобрять');return}
+ const pl=plants[p.plant];
+ state.fertilizer--;
+ if(pl.type==='multi'&&p.ready)p.fruitProgress+=pl.fruit*.6;
+ else p.progress+=pl.grow*.35;
+ fertilizeMode=false;
+ msg('Удобрение применено ✨');
+ save(true);tick(0);render();
+}
+function toggleHeart(id){
+ const count=state.harvest[id]||0;
+ if(count<=0)return;
+ const h=state.heart[id]||0;
+ if(h<count){
+  state.heart[id]=h+1;
+  msg('Сердечко поставлено ❤️');
+ }else{
+  state.heart[id]=0;
+  msg('Сердечки убраны');
+ }
+ save(true);render();
+}
+function sellAll(){
+ let total=0;
+ const mult=Date.now()<state.goldUntil?1.25:1;
+ ids.forEach(id=>{
+  const free=(state.harvest[id]||0)-(state.heart[id]||0);
+  if(free>0){
+   total+=Math.floor(free*plants[id].sell*mult);
+   state.harvest[id]-=free;
+  }
+ });
+ if(total<=0){msg('Нет растений для продажи');sound('error');return}
+ coin(total);
+ msg('Продано на '+total+' монет');
+ sound('sell');
+ save(true);render();
+}
+function waterAll(){
+ if(!state.watering){msg('Сначала купи лейку');sound('error');return}
+ let n=0;
+ state.plots.forEach(p=>{
+  if(p.dry){p.dry=false;n++}
+  if(p.plant&&!p.ready)p.progress+=plants[p.plant].grow*.12;
+ });
+ msg(n?'Сухие грядки восстановлены 💧':'Все растения политы 💧');
+ save(true);render();
+}
+function hasMint(i){
+ const cols=innerWidth>=430?3:2;
+ return [i-1,i+1,i-cols,i+cols].some(n=>n>=0&&n<state.plots.length&&state.plots[n].plant==='mint'&&state.plots[n].ready);
+}
+function tick(dt){
+ const now=Date.now();
+ state.plots.forEach((p,i)=>{
+  if(!p.plant)return;
+  const pl=plants[p.plant];
+  let speed=1;
+  if(now<state.sunUntil)speed*=1.8;
+  if(p.dry)speed*=.45;
+  if(p.weeds)speed*=.65;
+  if(p.bugs)speed*=.7;
+  if(p.snail>0)speed=0;
+  if(hasMint(i))speed*=1.25;
+  if(pl.type==='multi'&&p.ready){
+   if(!p.fruitReady){
+    p.fruitProgress+=dt*speed;
+    if(p.fruitProgress>=pl.fruit){p.fruitProgress=pl.fruit;p.fruitReady=true}
+   }
+  }else{
+   p.progress+=dt*speed;
+   if(p.progress>=pl.grow){p.progress=pl.grow;p.ready=true}
+  }
+ });
+}
+function badEvent(){
+ const arr=state.plots.map((p,i)=>p.plant?i:null).filter(x=>x!==null);
+ if(!arr.length)return;
+ const i=arr[Math.floor(Math.random()*arr.length)];
+ const p=state.plots[i];
+ const r=Math.random();
+ if(r<.28&&!p.weeds){p.weeds=true;msg('Появились сорняки 🌾')}
+ else if(r<.55&&!p.bugs&&p.plant!=='cactus'){p.bugs=true;msg('Появились жуки 🐞')}
+ else if(r<.78&&!p.dry){p.dry=true;msg('Засуха! Грядка сухая 💧')}
+ else if(!p.snail){p.snail=3;msg('Улитка-Обжора остановила рост 🐌')}
+ save(true);render();
+}
+function goodEvent(){
+ const r=Math.random();
+ if(r<.3){
+  state.sunUntil=Date.now()+30000;
+  msg('Солнечный день! Рост быстрее 30 секунд ☀️');
+ }else if(r<.55){
+  state.plots.forEach(p=>p.dry=false);
+  msg('Дождь! Сухие грядки восстановлены 🌧️');
+ }else if(r<.75){
+  state.goldUntil=Date.now()+30000;
+  msg('Золотой час! Продажа +25% 🟡');
+ }else spawnGift();
+ save(true);render();
+}
+function spawnGift(){
+ const g=$('gift');
+ g.style.left=(20+Math.random()*60)+'%';
+ g.style.top=(25+Math.random()*35)+'%';
+ g.classList.add('show');
+ msg('Появился подарочный ящик 🎁');
+ setTimeout(()=>g.classList.remove('show'),9000);
+}
+function openGift(){
+ const g=$('gift');
+ if(!g.classList.contains('show'))return;
+ g.classList.remove('show');
+ const r=Math.random();
+ if(r<.45){
+  const c=20+Math.floor(Math.random()*70);
+  coin(c);msg('В подарке '+c+' монет!');
+ }else if(r<.75){
+  const cheap=['carrot','strawberry','sunflower','cactus'];
+  const id=cheap[Math.floor(Math.random()*cheap.length)];
+  state.seeds[id]=(state.seeds[id]||0)+1;
+  msg('В подарке семена: '+plants[id].name);
+ }else{
+  state.fertilizer++;
+  msg('В подарке удобрение ✨');
+ }
+ sound('buy');
+ save(true);render();
+}
+function spawnThief(){
+ const steal=ids.filter(id=>(state.harvest[id]||0)>(state.heart[id]||0));
+ if(!steal.length||$('thief').classList.contains('show'))return;
+ thiefLeft=5;
+ $('thiefTime').textContent=thiefLeft;
+ $('thief').classList.add('show');
+ sound('thief');
+ clearInterval(thiefTimer);
+ thiefTimer=setInterval(()=>{
+  thiefLeft--;
+  $('thiefTime').textContent=thiefLeft;
+  if(thiefLeft<=0)thiefSteal();
+ },1000);
+}
+function stopThief(){
+ clearInterval(thiefTimer);
+ $('thief').classList.remove('show');
+ msg('Воришка убежал!');
+}
+function thiefSteal(){
+ clearInterval(thiefTimer);
+ $('thief').classList.remove('show');
+ const steal=ids.filter(id=>(state.harvest[id]||0)>(state.heart[id]||0));
+ if(!steal.length){msg('Воришка ничего не украл');return}
+ const id=steal[Math.floor(Math.random()*steal.length)];
+ state.harvest[id]--;
+ msg('Воришка украл: '+plants[id].name+' 🥷');
+ save(true);render();
+}
+
+$('shopBtn').onclick=()=>{$('shopModal').classList.add('show');renderShop()};
+$('closeShop').onclick=()=>{$('shopModal').classList.remove('show')};
+$('saveBtn').onclick=()=>save(false);
+$('newBtn').onclick=()=>{
+ if(confirm('Точно начать новую игру? Прогресс удалится.')){
+  localStorage.removeItem(SAVE);
+  state=defaultState();
+  selectedSeed=null;
+  fertilizeMode=false;
+  msg('Новая игра началась!');
+  render();save(true);
+ }
+};
+$('sellBtn').onclick=sellAll;
+$('waterBtn').onclick=waterAll;
+$('fertBtn').onclick=()=>{
+ if(state.fertilizer<=0){msg('Нет удобрения. Купи в магазине.');sound('error');return}
+ fertilizeMode=!fertilizeMode;
+ selectedSeed=null;
+ msg(fertilizeMode?'Выбери грядку для удобрения':'Удобрение отменено');
+ render();
+};
+$('catchThief').onclick=stopThief;
+$('gift').onclick=openGift;
+
+load();
+render();
+
+setInterval(()=>{
+ const now=Date.now();
+ state.plots.forEach(p=>{
+  p.last=p.last||now;
+  let dt=(now-p.last)/1000;
+  if(dt>5)dt=5;
+  p.last=now;
+  tick(dt);
+ });
+ if(now-state.lastDay>60000){
+  state.day++;
+  state.lastDay=now;
+ }
+ if(Math.random()<.015)badEvent();
+ if(Math.random()<.007)goodEvent();
+ if(Math.random()<(state.scarecrow?.002:.005))spawnThief();
+ renderTop();
+ renderPlots();
+ save(true);
+},1000);
+
+setInterval(()=>save(true),7000);
+})();
+</script>
+</body>
+</html>
