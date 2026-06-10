@@ -3,43 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Садик Сокровищ v1.2 — Тайны Сада</title>
+<title>Садик Сокровищ v1.3 — Подземные Корни</title>
 <style>
 *{box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
 :root{
---sky:#8be7ff;--grass:#9fe77a;--panel:#fff6d8;--card:#fffdf2;--ink:#2b2112;
---gold:#ffd55b;--green:#65d95f;--blue:#78d8ff;--red:#ff5d52;--purple:#bb82ff;
+--sky:#86e7ff;--grass:#9be873;--soil:#7b491c;--panel:#fff5d5;--card:#fffdf1;--ink:#2a2112;
+--gold:#ffd65a;--green:#66d861;--blue:#78d8ff;--red:#ff5b50;--purple:#ba80ff;--dark:#241d2d;
 }
-body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:linear-gradient(var(--sky),var(--grass));overflow:hidden}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(var(--sky),var(--grass));color:var(--ink);overflow:hidden}
 body.noanim *{animation:none!important;transition:none!important}
-body.compact .plot{min-height:132px}body.compact .itemCard{min-width:86px;max-width:86px}
-#game{height:100dvh;max-width:650px;margin:auto;display:flex;flex-direction:column;position:relative;overflow:hidden;background:
-radial-gradient(circle at 20% 10%,rgba(255,255,255,.55) 0 45px,transparent 46px),
-linear-gradient(#8ce8ff 0 21%,#a5e979 21% 100%)}
-.top{padding:7px;background:rgba(255,248,214,.95);border-bottom:2px solid rgba(160,110,25,.25);box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.stat{background:#fffdf2;border:2px solid #f3c84d;border-radius:13px;text-align:center;font-weight:900;font-size:10.5px;padding:5px 2px;box-shadow:0 3px 0 #c89421}
-.xpOuter{height:13px;margin-top:6px;border-radius:99px;background:#5b421e;border:2px solid #fff1a2;overflow:hidden}
-#xpBar{height:100%;width:0;background:linear-gradient(90deg,#61ff6e,#fff052,#ff9d38)}
-.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:6px 7px;background:rgba(255,248,214,.76)}
-button{border:0;border-radius:13px;padding:9px 5px;font-weight:900;color:#30230c;background:linear-gradient(#fff7b4,#ffd14c);box-shadow:0 4px 0 #ad7a16;cursor:pointer}
-button:active{transform:translateY(3px);box-shadow:0 1px 0 #ad7a16}
+body.compact .plot,body.compact .mineBlock{min-height:112px}
+body.compact .itemCard{min-width:84px;max-width:84px}
+#game{height:100dvh;max-width:680px;margin:auto;display:flex;flex-direction:column;position:relative;overflow:hidden;background:linear-gradient(#8be8ff 0 20%,#a7ea79 20% 100%)}
+#game.underground,#game.mine{background:radial-gradient(circle at 80% 10%,rgba(120,80,255,.35),transparent 90px),linear-gradient(#241d2d,#3b2b1f 35%,#231812)}
+.top{padding:7px;background:rgba(255,248,214,.95);border-bottom:2px solid rgba(130,85,20,.25);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+#game.underground .top,#game.mine .top{background:rgba(37,31,47,.94);color:#fff4d2;border-color:#5d4b7a}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.stat{background:#fffdf2;border:2px solid #f0c84d;border-radius:13px;text-align:center;font-weight:900;font-size:10px;padding:5px 2px;box-shadow:0 3px 0 #be8520}
+#game.underground .stat,#game.mine .stat{background:#33283f;border-color:#8b6dff;box-shadow:0 3px 0 #17101f;color:#fff}
+.xpOuter{height:13px;margin-top:6px;border-radius:99px;background:#5a401d;border:2px solid #fff0a0;overflow:hidden}
+#xpBar{height:100%;width:0;background:linear-gradient(90deg,#63ff75,#fff05a,#ff9a36)}
+.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:6px 7px;background:rgba(255,248,214,.78)}
+#game.underground .nav,#game.mine .nav{background:rgba(32,26,40,.84)}
+button{border:0;border-radius:13px;padding:9px 5px;font-weight:900;color:#30230c;background:linear-gradient(#fff7b5,#ffd24b);box-shadow:0 4px 0 #a97818;cursor:pointer}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #a97818}
 button:disabled{opacity:.45;filter:grayscale(1)}
-.good{background:linear-gradient(#ddffd2,#63d95e);box-shadow:0 4px 0 #2c9629}
+.good{background:linear-gradient(#ddffd3,#63d95e);box-shadow:0 4px 0 #2c9629}
 .blue{background:linear-gradient(#e8f9ff,#73d5ff);box-shadow:0 4px 0 #2b94c9}
 .red{background:linear-gradient(#ffb2ab,#ff5b50);box-shadow:0 4px 0 #b92e29;color:white}
 .purple{background:linear-gradient(#ecd4ff,#bd82ff);box-shadow:0 4px 0 #7446b2}
-.mini{font-size:11px;padding:7px 5px;border-radius:10px}
+.darkBtn{background:linear-gradient(#d8c5ff,#8d66ff);box-shadow:0 4px 0 #43317e}
 #msg{margin:6px 7px;padding:8px;min-height:36px;background:rgba(255,255,255,.84);border:2px solid #f2c850;border-radius:16px;text-align:center;font-weight:900;font-size:12.5px;box-shadow:0 5px 15px rgba(60,40,10,.13)}
+#game.underground #msg,#game.mine #msg{background:rgba(255,255,255,.13);border-color:#8b6dff;color:#fff4d2}
 .field{flex:1;overflow:auto;padding:0 7px 7px}
-#plots{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;padding-bottom:10px}
-@media(min-width:450px){#plots{grid-template-columns:repeat(3,1fr)}}
-.plot{min-height:152px;border:3px solid #694114;border-radius:21px;background:linear-gradient(160deg,#b87939,#744415);position:relative;overflow:hidden;padding:7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;box-shadow:0 6px 16px rgba(55,35,8,.2)}
-.plot:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(168deg,transparent 0 17px,rgba(64,31,6,.24) 18px 23px),radial-gradient(circle at 50% 100%,rgba(255,255,255,.11),transparent 48%)}
+#plots,#uPlots,#mineGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;padding-bottom:10px}
+@media(min-width:450px){#plots,#uPlots,#mineGrid{grid-template-columns:repeat(3,1fr)}}
+.plot,.mineBlock{min-height:150px;border:3px solid #694114;border-radius:21px;background:linear-gradient(160deg,#b87939,#744415);position:relative;overflow:hidden;padding:7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;box-shadow:0 6px 16px rgba(55,35,8,.2)}
+.uPlot{background:linear-gradient(160deg,#4b3a35,#211a22);border-color:#8a6d55;color:#fff4d2}
+.mineBlock{background:linear-gradient(160deg,#66503f,#33251e);border-color:#92765e;color:#fff4d2;justify-content:center;font-size:42px;font-weight:900}
+.mineBlock.dug{background:linear-gradient(160deg,#1f1820,#121015);opacity:.55}
+.plot:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(168deg,transparent 0 17px,rgba(64,31,6,.24) 18px 23px),radial-gradient(circle at 50% 100%,rgba(255,255,255,.12),transparent 48%)}
+.uPlot:before{background:repeating-linear-gradient(168deg,transparent 0 17px,rgba(0,0,0,.24) 18px 23px),radial-gradient(circle at 70% 10%,rgba(118,221,255,.16),transparent 45%)}
 .plot.dry{background:linear-gradient(160deg,#a8885f,#6c5e49)}
+.plot.slime{outline:4px solid #79ff98}
 .plot.fog:after{content:"";position:absolute;inset:0;background:rgba(235,246,255,.72);z-index:8;backdrop-filter:blur(1px)}
 .plot.sel{outline:4px solid #fff25a}
 .plot.gold{border-color:#ffd33d}.plot.moon{border-color:#b98cff}.plot.fast{border-color:#70f56c}.plot.protect{border-color:#72d4ff}.plot.wet{border-color:#42bfff}.plot.shadow{border-color:#382a58}
+.uPlot.crystal{border-color:#66e7ff}.uPlot.mushroom{border-color:#c783ff}.uPlot.ancient{border-color:#ffd36a}.uPlot.warm{border-color:#ff875d}
 .plot>*{position:relative;z-index:10}
 .plotTop{width:100%;display:flex;justify-content:space-between;gap:3px;color:white;text-shadow:0 1px 2px #000;font-size:10px;font-weight:900}
 .plant{font-size:45px;line-height:1;filter:drop-shadow(0 5px 5px rgba(0,0,0,.28))}
@@ -48,20 +58,22 @@ button:disabled{opacity:.45;filter:grayscale(1)}
 .progress{height:12px;width:92%;border-radius:99px;overflow:hidden;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.55)}
 .bar{height:100%;width:0;background:linear-gradient(90deg,#71ff6d,#fff052,#ff9836)}
 .tags{display:flex;gap:4px;justify-content:center;min-height:25px;flex-wrap:wrap}
-.tag{font-size:15px;background:rgba(255,255,255,.9);border-radius:99px;padding:2px 6px;font-weight:900;border:1px solid rgba(0,0,0,.08)}
-.plotBtns{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}.plotBtns button{font-size:10px;padding:6px 5px;border-radius:10px}
+.tag{font-size:15px;background:rgba(255,255,255,.9);border-radius:99px;padding:2px 6px;font-weight:900;border:1px solid rgba(0,0,0,.08);color:#23180d}
+.plotBtns{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.plotBtns button{font-size:10px;padding:6px 5px;border-radius:10px}
 .bottom{max-height:45dvh;background:rgba(255,247,216,.98);border-top:3px solid #d39a2c;border-radius:20px 20px 0 0;padding:7px;display:flex;flex-direction:column;gap:6px;box-shadow:0 -8px 22px rgba(60,40,10,.18)}
+#game.underground .bottom,#game.mine .bottom{background:rgba(37,31,47,.98);border-color:#8b6dff;color:#fff4d2}
 .sell{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.tabs button{font-size:10.5px;padding:7px 2px;border-radius:10px}
 #inventory{display:flex;gap:6px;overflow:auto;min-height:94px;padding-bottom:4px}
 .itemCard{min-width:94px;max-width:94px;background:var(--card);border:2px solid #e4c36f;border-radius:16px;padding:6px;text-align:center;position:relative;box-shadow:0 3px 10px rgba(0,0,0,.08)}
-.itemCard.sel{outline:3px solid #ffad22}.itemCard .ic{font-size:27px}.itemCard .nm{font-size:10px;font-weight:900;height:27px;overflow:hidden}.itemCard .ct{font-size:12px;font-weight:900;color:#70440f}
+.itemCard.sel{outline:3px solid #ffad22}.itemCard .ic{font-size:27px}.itemCard .nm{font-size:10px;font-weight:900;height:30px;overflow:hidden}.itemCard .ct{font-size:12px;font-weight:900;color:#70440f}
 .heart{position:absolute;right:4px;top:3px;background:white;border-radius:99px;padding:1px 4px;font-size:11px}
-.common{border-color:#cab989}.rare{border-color:#48b8ff}.epic{border-color:#b56bff}.legendary{border-color:#ffb22e}.mythic{border-color:#ff4cba}.secret{border-color:#20202b;background:#f2f1ff}
-.seed{background:#f1ffe9}.chest{background:#fff0ff}.tool{background:#effaff}.protected{background:#fff0f3}
-.modal{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:60;display:none;align-items:center;justify-content:center;padding:9px}
+.common{border-color:#cab989}.rare{border-color:#48b8ff}.epic{border-color:#b56bff}.legendary{border-color:#ffb22e}.mythic{border-color:#ff4cba}.secret{border-color:#20202b;background:#f2f1ff}.undergroundR{border-color:#53f1ff;background:#effcff}
+.seed{background:#f1ffe9}.chest{background:#fff0ff}.tool{background:#effaff}.protected{background:#fff0f3}.artifact{background:#fff8e2;border-color:#c09b51}
+.modal{position:absolute;inset:0;background:rgba(0,0,0,.58);z-index:60;display:none;align-items:center;justify-content:center;padding:9px}
 .modal.show{display:flex}
-.panel{width:100%;max-width:620px;max-height:94dvh;background:#fff6d8;border:3px solid #d19a2e;border-radius:23px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 15px 35px rgba(0,0,0,.3)}
+.panel{width:100%;max-width:640px;max-height:94dvh;background:#fff6d8;border:3px solid #d19a2e;border-radius:23px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 15px 35px rgba(0,0,0,.3)}
 .panelHead{padding:10px;background:linear-gradient(#fff7b5,#ffd14b);display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:900}
 .panelBody{padding:9px;overflow:auto}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
@@ -70,11 +82,12 @@ button:disabled{opacity:.45;filter:grayscale(1)}
 .shopTop{display:flex;gap:8px;align-items:center}.shopIcon{font-size:32px;width:38px;text-align:center}.shopName{font-weight:900}.small{font-size:11px;line-height:1.35;opacity:.9}
 .meta{display:grid;grid-template-columns:1fr 1fr;gap:2px;font-size:10.5px;margin:5px 0}
 textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px;padding:8px;font-weight:700;resize:vertical}
-#thief,#floatEvent,#starEvent{position:absolute;z-index:90;left:50%;top:34%;transform:translate(-50%,-50%);background:#282330;color:white;border:3px solid #fff05d;border-radius:24px;padding:13px;text-align:center;display:none;box-shadow:0 15px 35px rgba(0,0,0,.35)}
-#thief.show,#floatEvent.show,#starEvent.show{display:block;animation:shake .6s infinite}
+#thief,#floatEvent,#starEvent,#rootMole{position:absolute;z-index:90;left:50%;top:34%;transform:translate(-50%,-50%);background:#282330;color:white;border:3px solid #fff05d;border-radius:24px;padding:13px;text-align:center;display:none;box-shadow:0 15px 35px rgba(0,0,0,.35)}
+#thief.show,#floatEvent.show,#starEvent.show,#rootMole.show{display:block;animation:shake .6s infinite}
 #gift{position:absolute;z-index:82;font-size:48px;display:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.3))}
 #gift.show{display:block;animation:bob 1s infinite}
 .toast{position:absolute;left:50%;bottom:47dvh;transform:translateX(-50%);background:rgba(33,27,18,.93);color:white;padding:9px 14px;border-radius:99px;font-weight:900;z-index:120;pointer-events:none;animation:toast 1.8s forwards}
+.hidden{display:none!important}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes shake{0%,100%{transform:translate(-50%,-50%) rotate(-2deg)}50%{transform:translate(-50%,-50%) rotate(2deg)}}
 @keyframes toast{0%{opacity:0;transform:translate(-50%,15px)}15%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-12px)}}
@@ -86,27 +99,34 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
     <div class="stats">
       <div class="stat">🪙 <span id="coins">50</span></div>
       <div class="stat">✨ <span id="dust">0</span></div>
-      <div class="stat">⭐ Ур. <span id="level">1</span></div>
+      <div class="stat">💠 <span id="roots">0</span></div>
+      <div class="stat">⭐ <span id="level">1</span></div>
       <div class="stat">📅 <span id="day">1</span> <span id="season">Весна</span></div>
     </div>
     <div class="xpOuter"><div id="xpBar"></div></div>
-    <div class="small" style="text-align:center;font-weight:900;margin-top:3px">Событие: <span id="eventName">нет</span></div>
+    <div class="small" style="text-align:center;font-weight:900;margin-top:3px">Событие: <span id="eventName">нет</span> • v1.3</div>
   </div>
 
   <div class="nav">
-    <button id="shopBtn">🏪 Магазин</button>
-    <button id="invBtn" class="blue">🎒 Инв.</button>
-    <button id="questBtn">📜 Задания</button>
-    <button id="achBtn" class="purple">🏆 Ачивки</button>
-    <button id="colBtn" class="good">📖 Коллек.</button>
-    <button id="secBtn">🔮 Секреты</button>
+    <button id="gardenBtn" class="good">🌿 Сад</button>
+    <button id="underBtn" class="darkBtn">🕳️ Подз.</button>
+    <button id="mineBtn" class="darkBtn">⛏️ Шахта</button>
+    <button id="shopBtn">🏪 Маг.</button>
+    <button id="questBtn">📜 Зад.</button>
+    <button id="achBtn" class="purple">🏆 Ачив.</button>
+    <button id="colBtn" class="good">📖 Кол.</button>
+    <button id="secBtn">🔮 Секр.</button>
     <button id="dailyBtn" class="good">🎁 Бонус</button>
     <button id="setBtn">⚙️ Настр.</button>
   </div>
 
-  <div id="msg">Садик Сокровищ v1.2 — Тайны Сада</div>
+  <div id="msg">Садик Сокровищ v1.3 — Подземные Корни</div>
 
-  <div class="field"><div id="plots"></div></div>
+  <div class="field">
+    <div id="plots"></div>
+    <div id="uPlots" class="hidden"></div>
+    <div id="mineGrid" class="hidden"></div>
+  </div>
 
   <div class="bottom" id="bottom">
     <div class="sell">
@@ -129,23 +149,11 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
     <div id="inventory"></div>
   </div>
 
-  <div id="thief">
-    <div style="font-size:50px">🥷</div><b>Ночной Воришка!</b><br>
-    Осталось: <b id="thiefTime">5</b><br><button id="catchThief" class="red">Прогнать!</button>
-  </div>
-
+  <div id="thief"><div style="font-size:50px">🥷</div><b>Ночной Воришка!</b><br>Осталось: <b id="thiefTime">5</b><br><button id="catchThief" class="red">Прогнать!</button></div>
+  <div id="rootMole"><div style="font-size:50px">🦡</div><b>Крот-вор!</b><br>Хочет украсть корневые кристаллы<br><button id="catchRootMole" class="red">Прогнать!</button></div>
   <div id="gift">🎁</div>
-
-  <div id="starEvent">
-    <div style="font-size:54px">🌠</div><b>Падение звезды!</b><br>
-    Нажми и получи звёздную пыль<br><button id="catchStar" class="good">Поймать</button>
-  </div>
-
-  <div id="floatEvent">
-    <div id="floatIcon" style="font-size:52px">🧙</div>
-    <b id="floatTitle">Событие</b><br><span id="floatText">Нажми</span><br>
-    <button id="floatBtn" class="good">Забрать</button>
-  </div>
+  <div id="starEvent"><div style="font-size:54px">🌠</div><b>Падение звезды!</b><br>Нажми и получи звёздную пыль<br><button id="catchStar" class="good">Поймать</button></div>
+  <div id="floatEvent"><div id="floatIcon" style="font-size:52px">🧙</div><b id="floatTitle">Событие</b><br><span id="floatText">Нажми</span><br><button id="floatBtn" class="good">Забрать</button></div>
 
   <div class="modal" id="shopModal">
     <div class="panel">
@@ -153,11 +161,15 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
       <div class="panelBody">
         <div class="grid3">
           <button data-shop="seeds">Семена</button>
-          <button data-shop="upgrades">Улучшения</button>
+          <button data-shop="upgrades">Улучш.</button>
           <button data-shop="plots">Грядки</button>
-          <button data-shop="decor">Украшения</button>
-          <button data-shop="star">Звёздный</button>
-          <button data-shop="tools">Инструменты</button>
+          <button data-shop="decor">Украш.</button>
+          <button data-shop="star">Звёзд.</button>
+          <button data-shop="tools">Инструм.</button>
+          <button data-shop="uSeeds">Подз. сем.</button>
+          <button data-shop="uPlots">Подз. гряд.</button>
+          <button data-shop="shovels">Лопаты</button>
+          <button data-shop="uItems">Подз. предм.</button>
         </div>
         <div id="shopList"></div>
       </div>
@@ -180,8 +192,8 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
           <button id="compactToggle">📱 Компакт</button>
           <button id="saveBtn" class="blue">💾 Сохранить</button>
         </div>
-        <div class="rowBox"><b>📤 Экспорт сохранения</b><p class="small">Скопируй код и сохрани его.</p><button id="exportBtn" class="blue">Экспорт</button></div>
-        <div class="rowBox"><b>📥 Импорт сохранения</b><p class="small">Вставь код сохранения.</p><textarea id="saveCode" placeholder="Код сохранения"></textarea><button id="importBtn" class="good">Импорт</button></div>
+        <div class="rowBox"><b>📤 Экспорт сохранения</b><p class="small">Скопируй код. Поддерживает старые и новые сохранения.</p><button id="exportBtn" class="blue">Экспорт</button></div>
+        <div class="rowBox"><b>📥 Импорт сохранения</b><p class="small">Вставь код. Старые сохранения автоматически обновятся до v1.3.</p><textarea id="saveCode" placeholder="Код сохранения"></textarea><button id="importBtn" class="good">Импорт</button></div>
         <div class="rowBox"><b>🔄 Новая игра</b><br><br><button id="newBtn" class="red">Сбросить игру</button></div>
       </div>
     </div>
@@ -190,10 +202,7 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
   <div class="modal" id="tutorialModal">
     <div class="panel">
       <div class="panelHead"><span>🌱 Обучение</span><button id="skipTut" class="red">Закрыть</button></div>
-      <div class="panelBody">
-        <div class="rowBox" id="tutorialText"></div>
-        <button id="nextTut" class="good">Дальше</button>
-      </div>
+      <div class="panelBody"><div class="rowBox" id="tutorialText"></div><button id="nextTut" class="good">Дальше</button></div>
     </div>
   </div>
 </div>
@@ -203,42 +212,53 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
 "use strict";
 
 const SAVE="sadik_sokrovishch_save";
-const GAME_VERSION="1.2";
-
+const GAME_VERSION="1.3";
 const DAY_MS=120000;
+
 const seasons=["Весна","Лето","Осень","Зима"];
 const rarity={common:"обычное",rare:"редкое",epic:"эпическое",legendary:"легендарное",mythic:"мифическое",secret:"секретное"};
 const RCLS={common:"common",rare:"rare",epic:"epic",legendary:"legendary",mythic:"mythic",secret:"secret"};
 
 const plants={
-carrot:{n:"Морковка Бодрячок",e:"🥕",t:"single",r:"common",lv:1,c:10,g:18,s:18,xp:4,d:"Быстро растёт, дешёвая и простая."},
+carrot:{n:"Морковка Бодрячок",e:"🥕",t:"single",r:"common",lv:1,c:10,g:18,s:18,xp:4,d:"Быстро растёт."},
 strawberry:{n:"Сахарная Клубника",e:"🍓",t:"multi",r:"common",lv:1,c:25,g:35,f:22,s:20,xp:5,d:"Многократная клубника."},
-chamomile:{n:"Медовая Ромашка",e:"🌼",t:"multi",r:"common",lv:2,c:75,g:55,f:30,s:35,xp:8,d:"Привлекает пчёлку-помощника."},
-sunflower:{n:"Лунный Подсолнух",e:"🌻",t:"single",r:"rare",lv:2,c:60,g:55,s:120,xp:12,d:"Редкий светящийся подсолнух."},
+chamomile:{n:"Медовая Ромашка",e:"🌼",t:"multi",r:"common",lv:2,c:75,g:55,f:30,s:35,xp:8,d:"Привлекает пчёлку."},
+sunflower:{n:"Лунный Подсолнух",e:"🌻",t:"single",r:"rare",lv:2,c:60,g:55,s:120,xp:12,d:"Редкий подсолнух."},
 cactus:{n:"Кактус-Страж",e:"🌵",t:"multi",r:"rare",lv:3,c:90,g:70,f:36,s:45,xp:10,d:"Не боится жуков."},
-pepper:{n:"Перечный Огонёк",e:"🌶️",t:"single",r:"rare",lv:3,c:130,g:65,s:260,xp:24,d:"После сбора отпугивает вредителей."},
+pepper:{n:"Перечный Огонёк",e:"🌶️",t:"single",r:"rare",lv:3,c:130,g:65,s:260,xp:24,d:"Отпугивает вредителей."},
 mushroom:{n:"Гриб-Светлячок",e:"🍄",t:"multi",r:"rare",lv:4,c:180,g:80,f:40,s:70,xp:18,d:"Ночью повышает шанс подарка."},
-pumpkin:{n:"Тыква-Копилка",e:"🎃",t:"single",r:"epic",lv:4,c:140,g:85,s:300,xp:22,d:"Иногда даёт бонусные монеты."},
-mint:{n:"Радужная Мята",e:"🌿",t:"multi",r:"epic",lv:5,c:220,g:65,f:45,s:80,xp:16,d:"Ускоряет соседние грядки."},
-rose:{n:"Кристальная Роза",e:"💎",t:"multi",r:"legendary",lv:6,c:400,g:120,f:70,s:250,xp:35,d:"Иногда даёт двойной цветок."},
-watermelon:{n:"Арбуз-Гигант",e:"🍉",t:"single",r:"epic",lv:7,c:320,g:115,s:750,xp:40,d:"Может дать 2 урожая сразу."},
-lavender:{n:"Ледяная Лаванда",e:"🪻",t:"multi",r:"epic",lv:8,c:450,g:105,f:60,s:160,xp:30,d:"Замедляет вредителей рядом."},
-berry:{n:"Золотая Ягода",e:"🟡",t:"single",r:"legendary",lv:9,c:700,g:140,s:1600,xp:70,d:"Очень дорогой урожай."},
-blueberry:{n:"Звёздная Черника",e:"🫐",t:"multi",r:"mythic",lv:10,c:900,g:160,f:85,s:420,xp:80,d:"Ночью плоды стоят дороже."},
-dragon:{n:"Драконий Фрукт",e:"🐉",t:"single",r:"mythic",lv:12,c:1200,g:190,s:3000,xp:180,d:"Даёт много опыта сада."},
-
-ghostTurnip:{n:"Призрачная Репа",e:"👻",t:"single",r:"secret",lv:1,c:0,g:70,s:650,xp:45,d:"Секрет тумана. Быстрее ночью.",secret:true},
-cometCucumber:{n:"Кометный Огурец",e:"🥒",t:"single",r:"secret",lv:1,c:0,g:95,s:900,xp:60,d:"Открывается после падения звезды.",secret:true},
+pumpkin:{n:"Тыква-Копилка",e:"🎃",t:"single",r:"epic",lv:4,c:140,g:85,s:300,xp:22,d:"Иногда даёт монеты."},
+mint:{n:"Радужная Мята",e:"🌿",t:"multi",r:"epic",lv:5,c:220,g:65,f:45,s:80,xp:16,d:"Ускоряет соседей."},
+rose:{n:"Кристальная Роза",e:"💎",t:"multi",r:"legendary",lv:6,c:400,g:120,f:70,s:250,xp:35,d:"Может дать двойной цветок."},
+watermelon:{n:"Арбуз-Гигант",e:"🍉",t:"single",r:"epic",lv:7,c:320,g:115,s:750,xp:40,d:"Может дать 2 урожая."},
+lavender:{n:"Ледяная Лаванда",e:"🪻",t:"multi",r:"epic",lv:8,c:450,g:105,f:60,s:160,xp:30,d:"Замедляет вредителей."},
+berry:{n:"Золотая Ягода",e:"🟡",t:"single",r:"legendary",lv:9,c:700,g:140,s:1600,xp:70,d:"Дорогой урожай."},
+blueberry:{n:"Звёздная Черника",e:"🫐",t:"multi",r:"mythic",lv:10,c:900,g:160,f:85,s:420,xp:80,d:"Ночью дороже."},
+dragon:{n:"Драконий Фрукт",e:"🐉",t:"single",r:"mythic",lv:12,c:1200,g:190,s:3000,xp:180,d:"Даёт много опыта."},
+ghostTurnip:{n:"Призрачная Репа",e:"👻",t:"single",r:"secret",lv:1,c:0,g:70,s:650,xp:45,d:"Секрет тумана.",secret:true},
+cometCucumber:{n:"Кометный Огурец",e:"🥒",t:"single",r:"secret",lv:1,c:0,g:95,s:900,xp:60,d:"После падения звезды.",secret:true},
 heartRose:{n:"Сердечная Роза",e:"💖",t:"multi",r:"secret",lv:1,c:0,g:100,f:55,s:180,xp:35,d:"Любит сердечки.",secret:true},
-shadowMushroom:{n:"Теневой Гриб",e:"🖤",t:"multi",r:"secret",lv:1,c:0,g:100,f:50,s:170,xp:32,d:"В тумане плодоносит быстрее.",secret:true},
-sunCarrot:{n:"Солнечная Морковь",e:"🌞",t:"single",r:"secret",lv:1,c:0,g:38,s:380,xp:80,d:"После 3 солнечных дней.",secret:true},
+shadowMushroom:{n:"Теневой Гриб",e:"🖤",t:"multi",r:"secret",lv:1,c:0,g:100,f:50,s:170,xp:32,d:"В тумане быстрее.",secret:true},
+sunCarrot:{n:"Солнечная Морковь",e:"🌞",t:"single",r:"secret",lv:1,c:0,g:38,s:380,xp:80,d:"После солнечных дней.",secret:true},
 moonBerry:{n:"Лунная Ягода",e:"🌙",t:"multi",r:"secret",lv:1,c:0,g:120,f:65,s:240,xp:50,d:"Ночью дороже.",secret:true},
 royalPumpkin:{n:"Королевская Тыква",e:"👑",t:"single",r:"secret",lv:1,c:0,g:150,s:2200,xp:100,d:"Семя Короля Сорняков.",secret:true}
+};
+
+const undergroundPlants={
+stoneBeet:{n:"Каменная Свёкла",e:"🪨",t:"single",r:"common",c:2,mc:80,g:42,s:95,xp:12,d:"Иногда даёт 1 корневой кристалл."},
+glowOnion:{n:"Светящийся Лук",e:"🧅",t:"multi",r:"common",c:3,mc:120,g:55,f:32,s:65,xp:14,d:"Ночью даёт плоды быстрее."},
+caveMint:{n:"Пещерная Мята",e:"🌱",t:"multi",r:"rare",c:5,mc:220,g:70,f:45,s:120,xp:22,d:"Ускоряет соседние подземные грядки."},
+rootMelon:{n:"Корневой Арбуз",e:"🍉",t:"single",r:"rare",c:7,mc:350,g:110,s:650,xp:40,d:"Может дать подземный сундук."},
+diamondMushroom:{n:"Алмазный Гриб",e:"🍄",t:"multi",r:"epic",c:10,mc:500,g:120,f:70,s:280,xp:44,d:"Иногда даёт кристаллы."},
+saltFlower:{n:"Соляной Цветок",e:"🧂",t:"single",r:"epic",c:12,mc:650,g:135,s:1100,xp:55,d:"Снижает слизней рядом."},
+ancientFlower:{n:"Древний Цветок",e:"🏵️",t:"multi",r:"legendary",c:18,mc:900,g:160,f:90,s:500,xp:80,d:"Открывается через артефакты.",needArtifact:"Каменное семя"},
+rootHeart:{n:"Сердце Корней",e:"💚",t:"single",r:"secret",c:25,mc:1200,g:190,s:3200,xp:180,d:"После победы над Гигантским Корнеедом.",secret:true}
 };
 
 const baseIds=Object.keys(plants).filter(id=>!plants[id].secret);
 const secretIds=Object.keys(plants).filter(id=>plants[id].secret);
 const allIds=Object.keys(plants);
+const uIds=Object.keys(undergroundPlants);
 
 const mutations={
 carrot:[["giantCarrot","Гигантская Морковка","🥕","rare",2],["sweetCarrot","Сладкая Морковка","🍬","rare",2.2],["goldCarrot","Золотая Морковка","🥇","epic",4]],
@@ -252,12 +272,12 @@ const upgrades=[
 {id:"watering",n:"Лейка",e:"💧",c:120,lv:1,d:"Открывает полив."},
 {id:"goldWatering",n:"Золотая лейка",e:"🚿",c:700,lv:5,d:"Сильнее ускоряет рост."},
 {id:"scarecrow",n:"Пугало",e:"🧍",c:250,lv:1,d:"Меньше воришек и ворон."},
-{id:"ironScarecrow",n:"Железное пугало",e:"🛡️",c:900,lv:6,d:"Ещё меньше воришек и ворон."},
+{id:"ironScarecrow",n:"Железное пугало",e:"🛡️",c:900,lv:6,d:"Ещё меньше воришек."},
 {id:"gloves",n:"Садовые перчатки",e:"🧤",c:500,lv:4,d:"Больше опыта за сбор."},
-{id:"storage",n:"Склад",e:"📦",c:600,lv:4,d:"Увеличивает лимит инвентаря."},
+{id:"storage",n:"Склад",e:"📦",c:600,lv:4,d:"Больше места."},
 {id:"autoWater",n:"Автополив",e:"💦",c:1500,lv:8,d:"Иногда поливает сам."},
 {id:"compost",n:"Магический компост",e:"🪄",c:2000,lv:9,d:"Больше шанс двойного урожая."},
-{id:"expansion",n:"Расширение сада",e:"🌳",c:2500,lv:7,d:"Открывает лимит до 20 грядок."}
+{id:"expansion",n:"Расширение сада",e:"🌳",c:2500,lv:7,d:"Лимит до 20 грядок."}
 ];
 
 const decorations=[
@@ -271,9 +291,16 @@ const decorations=[
 ];
 
 const tools=[
-{id:"shears",n:"Обычные ножницы",e:"✂️",coins:300,d:"Быстрее убирают сорняки и помогают против босса."},
-{id:"ironShears",n:"Железные ножницы",e:"⚔️",coins:900,d:"Сорняки в 1 нажатие, боссу больше урона."},
-{id:"goldShears",n:"Золотые ножницы",e:"🏆",coins:2000,dust:5,d:"Сильно помогают против босса, шанс звёздной пыли."}
+{id:"shears",n:"Обычные ножницы",e:"✂️",coins:300,d:"Помогают против сорняков."},
+{id:"ironShears",n:"Железные ножницы",e:"⚔️",coins:900,d:"Сорняки в 1 нажатие."},
+{id:"goldShears",n:"Золотые ножницы",e:"🏆",coins:2000,dust:5,d:"Шанс звёздной пыли."}
+];
+
+const shovels=[
+{id:"basic",n:"Обычная лопата",e:"🥄",coins:250,roots:0,d:"Быстрее копает шахту."},
+{id:"iron",n:"Железная лопата",e:"⛏️",coins:700,roots:8,d:"Лучшие находки в шахте."},
+{id:"crystal",n:"Кристальная лопата",e:"💎",coins:1200,roots:18,d:"Больше шанс корневых кристаллов."},
+{id:"ancient",n:"Древняя лопата",e:"🏺",coins:2000,roots:35,d:"Секретные подземные находки."}
 ];
 
 const plotTypes=[
@@ -282,26 +309,46 @@ const plotTypes=[
 {id:"moon",n:"Лунная грядка",e:"🌙",coins:1000,dust:5,d:"Шанс мутаций выше."},
 {id:"protect",n:"Защитная грядка",e:"🛡️",coins:600,d:"Вредители реже."},
 {id:"fast",n:"Быстрая грядка",e:"⚡",coins:800,d:"Рост +15%."},
-{id:"shadow",n:"Теневая грядка",e:"🌑",dust:7,d:"Ночные и секретные быстрее. Нужен туман.",needSecret:"fog"}
+{id:"shadow",n:"Теневая грядка",e:"🌑",dust:7,d:"Ночные и секретные быстрее.",needSecret:"fog"}
+];
+
+const uPlotTypes=[
+{id:"stone",n:"Каменная грядка",e:"🪨",coins:300,roots:2,d:"Обычная подземная грядка."},
+{id:"crystal",n:"Кристальная грядка",e:"💠",coins:700,roots:8,d:"Шанс кристалла при сборе."},
+{id:"mushroom",n:"Грибная грядка",e:"🍄",coins:900,roots:10,d:"Ускоряет грибы."},
+{id:"ancient",n:"Древняя грядка",e:"🏺",coins:1200,roots:18,d:"Шанс секретных подземных растений."},
+{id:"warm",n:"Тёплая грядка",e:"🔥",coins:800,roots:7,d:"Защищает от сырости и слизи."}
+];
+
+const artifacts=[
+["Древний горшок","🏺","Подземелье растёт быстрее."],
+["Корневая маска","🎭","Подземных вредителей меньше."],
+["Кристальный лист","💠","Больше шанс кристаллов."],
+["Каменное семя","🪨","Открывает Древний Цветок."],
+["Лунный обломок","🌙","Лучшие находки ночью."],
+["Пыльный амулет","📿","Больше опыта под землёй."],
+["Осколок древней грядки","🧩","Древние сундуки чаще."]
 ];
 
 const questTemplates=[
 {id:"buySeeds",text:"Купи семена",type:"buySeed",need:2,reward:{coins:50,xp:20}},
 {id:"plant",text:"Посади растение",type:"plant",need:3,reward:{coins:60,xp:25,item:"fertilizer",count:1}},
 {id:"carrots",text:"Собери 5 морковок",type:"harvestPlant",plant:"carrot",need:5,reward:{coins:90,xp:35}},
-{id:"straw",text:"Собери 3 клубники",type:"harvestPlant",plant:"strawberry",need:3,reward:{coins:90,xp:35,seed:"strawberry",count:1}},
 {id:"sell200",text:"Продай урожай на 200 монет",type:"sellCoins",need:200,reward:{coins:70,xp:40,chest:"small",count:1}},
 {id:"weed3",text:"Убери 3 сорняка",type:"pestKind",kind:"weeds",need:3,reward:{coins:60,xp:30,item:"fertilizer",count:1}},
 {id:"plot",text:"Купи новую грядку",type:"buyPlot",need:1,reward:{coins:100,xp:45}},
 {id:"thief",text:"Прогони воришку",type:"thief",need:1,reward:{coins:120,xp:40,chest:"rare",count:1}},
 {id:"mutation",text:"Найди первую мутацию",type:"mutation",need:1,reward:{dust:2,xp:80,chest:"star",count:1}},
-{id:"collection3",text:"Открой 3 растения в коллекции",type:"collection",need:3,reward:{coins:150,xp:60}},
-{id:"dust5",text:"Собери 5 звёздной пыли",type:"dustTotal",need:5,reward:{coins:200,xp:80}},
-{id:"star",text:"Нажми на падающую звезду",type:"star",need:1,reward:{dust:1,xp:50}},
-{id:"plotUpgrade",text:"Улучши грядку",type:"plotUpgrade",need:1,reward:{coins:100,xp:50}},
-{id:"decor",text:"Купи первое украшение",type:"decor",need:1,reward:{coins:100,xp:50,chest:"garden",count:1}},
-{id:"boss",text:"Победи Короля Сорняков",type:"boss",need:1,reward:{dust:3,xp:120,chest:"rare",count:1}},
-{id:"secretPlant",text:"Открой секретное растение",type:"secretPlant",need:1,reward:{dust:2,xp:90,chest:"mystery",count:1}}
+{id:"openUnder",text:"Открой Подземелье Корней",type:"openUnder",need:1,reward:{coins:200,xp:80,roots:3}},
+{id:"mine10",text:"Выкопай 10 блоков в шахте",type:"mine",need:10,reward:{coins:150,xp:60,roots:4}},
+{id:"roots3",text:"Найди 3 корневых кристалла",type:"rootGain",need:3,reward:{coins:180,xp:70,uChest:"small",count:1}},
+{id:"plantBeet",text:"Посади Каменную Свёклу",type:"uPlant",plant:"stoneBeet",need:1,reward:{coins:120,xp:50,roots:2}},
+{id:"uHarvest",text:"Собери первый подземный урожай",type:"uHarvest",need:1,reward:{coins:160,xp:70,roots:3}},
+{id:"artifact",text:"Найди первый артефакт",type:"artifact",need:1,reward:{coins:250,xp:100,roots:5}},
+{id:"rootMole",text:"Победи Крота-вора",type:"rootMole",need:1,reward:{coins:180,xp:70,roots:4}},
+{id:"buyUPlot",text:"Купи подземную грядку",type:"buyUPlot",need:1,reward:{coins:150,xp:60,seedU:"glowOnion",count:1}},
+{id:"upgradeShovel",text:"Улучши лопату",type:"shovel",need:1,reward:{coins:200,xp:80,roots:5}},
+{id:"rootBoss",text:"Победи Гигантского Корнееда",type:"rootBoss",need:1,reward:{coins:500,xp:180,roots:12,uChest:"boss",count:1}}
 ];
 
 const achievements=[
@@ -310,13 +357,17 @@ const achievements=[
 {id:"farmer",n:"Маленький фермер",d:"Заработать 500 монет продажей.",reward:{coins:150,xp:60}},
 {id:"defender",n:"Защитник сада",d:"Прогнать 10 вредителей.",reward:{coins:250,xp:90,chest:"rare",count:1}},
 {id:"collector",n:"Коллекционер",d:"Поставить сердечко на 5 разных предметов.",reward:{coins:250,xp:90}},
-{id:"secret",n:"Тайна найдена",d:"Открыть первый секрет.",reward:{dust:2,xp:80}},
 {id:"mutant",n:"Мутант-садовод",d:"Получить первую мутацию.",reward:{dust:2,xp:90,chest:"star",count:1}},
-{id:"stargazer",n:"Звездочёт",d:"Поймать падающую звезду 5 раз.",reward:{dust:5,xp:130}},
-{id:"moonFarmer",n:"Лунный фермер",d:"Купить лунную грядку.",reward:{dust:2,xp:90}},
-{id:"weedKing",n:"Победитель сорняков",d:"Победить Короля Сорняков.",reward:{coins:500,dust:2,xp:150}},
-{id:"secretSeed",n:"Секретное семя",d:"Открыть первое секретное растение.",reward:{dust:3,xp:100}},
-{id:"legendGarden",n:"Сад легенд",d:"Открыть 5 мутаций.",reward:{dust:5,xp:200,chest:"mythic",count:1}}
+{id:"firstDescent",n:"Первый спуск",d:"Открыть Подземелье Корней.",reward:{coins:300,xp:120,roots:5}},
+{id:"digger",n:"Копатель",d:"Выкопать 50 блоков.",reward:{coins:350,xp:130,roots:8}},
+{id:"crystalFarmer",n:"Кристальный фермер",d:"Собрать 25 корневых кристаллов.",reward:{coins:500,xp:160,uChest:"crystal",count:1}},
+{id:"archaeologist",n:"Археолог",d:"Найти 5 артефактов.",reward:{coins:600,xp:180,roots:12}},
+{id:"underGardener",n:"Подземный садовник",d:"Собрать 20 подземных урожаев.",reward:{coins:600,xp:200,uChest:"ancient",count:1}},
+{id:"rootBossWin",n:"Победитель Корнееда",d:"Победить Гигантского Корнееда.",reward:{coins:900,xp:250,roots:15}},
+{id:"depthHeart",n:"Сердце глубин",d:"Открыть Сердце Корней.",reward:{coins:1000,xp:300,roots:20}},
+{id:"luckyMiner",n:"Шахтёр удачи",d:"Найти подземный сундук в шахте.",reward:{coins:300,xp:120,roots:6}},
+{id:"ancientGarden",n:"Древний сад",d:"Открыть Древний Цветок.",reward:{coins:800,xp:220,roots:15}},
+{id:"fullDepth",n:"Полная глубина",d:"Купить 10 подземных грядок.",reward:{coins:1200,xp:300,roots:25}}
 ];
 
 const secretHints=[
@@ -324,14 +375,33 @@ const secretHints=[
 ["star","Ночью иногда падают звёзды. Успей нажать.","Падение звезды даёт пыль и может открыть Кометный Огурец."],
 ["heart","Некоторые растения любят сердечки.","5 разных сердечек открывают Сердечную Розу."],
 ["boss","Король сорняков прячет редкое семя.","Король Сорняков может дать Королевскую Тыкву."],
-["moon","Лунная грядка меняет обычные растения.","Лунная грядка повышает шанс мутаций."],
-["shop","Не все семена продаются в магазине.","Секретные семена добываются из событий и сундуков."]
+["underground","Под садом есть живые корни…","Открыто Подземелье Корней."],
+["rootBoss","В глубине кто-то ест корни…","Гигантский Корнеед может дать Сердце Корней."]
 ];
 
 function xpNeed(lv){return Math.floor(90+lv*lv*60)}
 function emptyPlot(){return{type:"normal",plant:null,mutation:null,progress:0,ready:false,fruitProgress:0,fruitReady:false,last:Date.now(),dry:false,weeds:0,bugs:false,snail:0,crow:0,mole:0,slug:0,bee:0,sunspot:false,boss:0,mutBoost:false}}
-function defState(){return{gameVersion:GAME_VERSION,coins:50,dust:0,level:1,xp:0,day:1,lastDay:Date.now(),seasonIndex:0,seasonDay:1,plots:[emptyPlot(),emptyPlot(),emptyPlot(),emptyPlot()],plotCount:4,seeds:{},harvest:{},heart:{},items:{fertilizer:0,superFertilizer:0,mutFertilizer:0,starWater:0,antiPest:0,moonTicket:0,secretPack:0},chests:{small:0,rare:0,gold:0,mythic:0,star:0,mystery:0,garden:0},upgrades:{},decor:{},tools:{},collection:{},mutations:{},secrets:{},secretPlants:{},quests:[],ach:{},daily:{last:"",streak:0},settings:{sound:true,anim:true,compact:false},tutorial:false,stats:{planted:0,harvested:0,sold:0,pests:0,weeds:0,thieves:0,stars:0,mutations:0,boss:0,dustTotal:0,heartKinds:{},sunEvents:0,nightEvents:0,decor:0,plotUp:0},effects:{sun:0,gold:0,fog:0,hot:0,pepper:0,star:0,antiPest:0},active:"нет"}}
-let S=defState(),selectedSeed=null,selectedItem=null,invTab="seeds",shopTab="seeds",lastTap={id:null,time:0},thiefTimer=null,thiefLeft=5,tut=0;
+function emptyUPlot(){return{type:"stone",plant:null,progress:0,ready:false,fruitProgress:0,fruitReady:false,last:Date.now(),wet:false,stoneBug:false,rootEater:0,slime:0,blindCrow:0,boss:0,crystalBoost:false}}
+
+function defState(){return{
+saveVersion:GAME_VERSION,gameVersion:GAME_VERSION,
+coins:50,dust:0,rootCrystals:0,level:1,xp:0,day:1,lastDay:Date.now(),seasonIndex:0,seasonDay:1,
+plots:[emptyPlot(),emptyPlot(),emptyPlot(),emptyPlot()],plotCount:4,
+seeds:{},uSeeds:{},harvest:{},heart:{},
+items:{fertilizer:0,superFertilizer:0,mutFertilizer:0,starWater:0,antiPest:0,moonTicket:0,secretPack:0,undergroundFertilizer:0,crystalWater:0,rootTorch:0,ancientKey:0,stoneSeedItem:0},
+chests:{small:0,rare:0,gold:0,mythic:0,star:0,mystery:0,garden:0},
+uChests:{small:0,crystal:0,ancient:0,boss:0},
+upgrades:{},decor:{},tools:{},
+underground:{unlocked:false,tutorial:false,uPlotCount:0,uPlots:[],shovel:"none",mine:[],mineReset:0,artifacts:{},rootBossSeen:false},
+collection:{},uCollection:{},mutations:{},secrets:{},secretPlants:{},quests:[],ach:{},
+daily:{last:"",streak:0},settings:{sound:true,anim:true,compact:false},
+tutorial:false,
+stats:{planted:0,harvested:0,sold:0,pests:0,weeds:0,thieves:0,stars:0,mutations:0,boss:0,dustTotal:0,heartKinds:{},sunEvents:0,nightEvents:0,decor:0,plotUp:0,mineDug:0,rootTotal:0,uHarvested:0,artifactsFound:0,rootBoss:0,uChestsMined:0},
+effects:{sun:0,gold:0,fog:0,hot:0,pepper:0,star:0,antiPest:0,rootTorch:0},
+active:"нет",view:"garden"
+}}
+
+let S=defState(),selectedSeed=null,selectedItem=null,invTab="seeds",shopTab="seeds",lastTap={id:null,time:0},thiefTimer=null,thiefLeft=5,tut=0,selectedUSeed=null;
 
 const $=id=>document.getElementById(id);
 function today(){return new Date().toISOString().slice(0,10)}
@@ -341,179 +411,321 @@ function season(){return seasons[S.seasonIndex%4]}
 function night(){return S.day%2===0}
 function plotLimit(){return S.upgrades.expansion?20:12}
 function basePlotPrice(){let n=S.plotCount;return n<12?80+(n-4)*65:900+(n-12)*260}
+function uPlotPrice(){let n=S.underground.uPlotCount;return{coins:300+n*180,roots:2+Math.floor(n*1.7)}}
 function msg(t){$("msg").textContent=t}
 function toast(t){let d=document.createElement("div");d.className="toast";d.textContent=t;$("game").appendChild(d);setTimeout(()=>d.remove(),1800)}
-function sound(t){if(!S.settings.sound)return;try{let c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain(),m={buy:650,plant:420,harvest:780,sell:900,error:150,chest:520,quest:980,level:1120,pest:120,win:1050,star:1300};o.frequency.value=m[t]||440;o.type=(t==="error"||t==="pest")?"sawtooth":"sine";g.gain.value=.045;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.14)}catch(e){}}
-function save(silent=true){try{S.gameVersion=GAME_VERSION;localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}if(!silent)msg("Сохранено 💾")}
+function sound(t){if(!S.settings.sound)return;try{let c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain(),m={buy:650,plant:420,harvest:780,sell:900,error:150,chest:520,quest:980,level:1120,pest:120,win:1050,star:1300,mine:260,root:560,boss:90};o.frequency.value=m[t]||440;o.type=(t==="error"||t==="pest"||t==="boss")?"sawtooth":"sine";g.gain.value=.045;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.14)}catch(e){}}
 function merge(a,b){if(!b||typeof b!=="object")return a;for(let k in b){if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==="object"&&!Array.isArray(a[k]))a[k]=merge(a[k],b[k]);else a[k]=b[k]}return a}
-function fixSaveAfterUpdate(){
-S.gameVersion=GAME_VERSION;
-if(!S.seeds)S.seeds={};
-if(!S.harvest)S.harvest={};
-if(!S.heart)S.heart={};
+function save(silent=true){try{S.saveVersion=GAME_VERSION;S.gameVersion=GAME_VERSION;localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}if(!silent)msg("Сохранено 💾")}
+function migrateSave(){
+S=merge(defState(),S);
+S.saveVersion=GAME_VERSION;S.gameVersion=GAME_VERSION;
+if(!S.rootCrystals)S.rootCrystals=0;
+if(!S.uSeeds)S.uSeeds={};
+if(!S.uChests)S.uChests={small:0,crystal:0,ancient:0,boss:0};
+if(!S.uCollection)S.uCollection={};
+if(!S.underground)S.underground=defState().underground;
+S.underground=merge(defState().underground,S.underground);
 if(!S.items)S.items={};
-if(!S.chests)S.chests={};
-if(!S.upgrades)S.upgrades={};
-if(!S.decor)S.decor={};
-if(!S.tools)S.tools={};
-if(!S.collection)S.collection={};
-if(!S.mutations)S.mutations={};
-if(!S.secrets)S.secrets={};
-if(!S.secretPlants)S.secretPlants={};
-if(!S.quests)S.quests=[];
-if(!S.ach)S.ach={};
-if(!S.daily)S.daily={last:"",streak:0};
-if(!S.settings)S.settings={sound:true,anim:true,compact:false};
+["fertilizer","superFertilizer","mutFertilizer","starWater","antiPest","moonTicket","secretPack","undergroundFertilizer","crystalWater","rootTorch","ancientKey","stoneSeedItem"].forEach(k=>{if(S.items[k]===undefined)S.items[k]=0});
 if(!S.stats)S.stats={};
-if(!S.effects)S.effects={};
+["mineDug","rootTotal","uHarvested","artifactsFound","rootBoss","uChestsMined"].forEach(k=>{if(S.stats[k]===undefined)S.stats[k]=0});
 if(!S.plots)S.plots=[];
 if(!S.plotCount)S.plotCount=4;
 while(S.plots.length<S.plotCount)S.plots.push(emptyPlot());
-for(let i=0;i<S.plots.length;i++){
-S.plots[i]=merge(emptyPlot(),S.plots[i]);
-}
+for(let i=0;i<S.plots.length;i++)S.plots[i]=merge(emptyPlot(),S.plots[i]);
 S.plots=S.plots.slice(0,S.plotCount);
+while(S.underground.uPlots.length<S.underground.uPlotCount)S.underground.uPlots.push(emptyUPlot());
+for(let i=0;i<S.underground.uPlots.length;i++)S.underground.uPlots[i]=merge(emptyUPlot(),S.underground.uPlots[i]);
+S.underground.uPlots=S.underground.uPlots.slice(0,S.underground.uPlotCount);
+if(!S.quests||S.quests.length<3)genQuests();
+if(!S.underground.mine||!S.underground.mine.length)resetMine(false);
 }
-function load(){try{let r=localStorage.getItem(SAVE);if(r)S=merge(defState(),JSON.parse(r))}catch(e){S=defState()}fixSaveAfterUpdate();if(!S.quests||S.quests.length<3)genQuests();applySettings();save()}
+function load(){try{let r=localStorage.getItem(SAVE);if(r)S=JSON.parse(r)}catch(e){S=defState()}migrateSave();applySettings();save()}
 function addCoins(n){S.coins=Math.max(0,Math.floor(S.coins+n))}
 function addDust(n){S.dust=Math.max(0,Math.floor(S.dust+n));if(n>0){S.stats.dustTotal+=n;progressQuest("dustTotal",S.stats.dustTotal,{})}}
-function addXp(n){if(S.upgrades.gloves)n=Math.ceil(n*1.2);S.xp+=Math.max(0,Math.floor(n));while(S.xp>=xpNeed(S.level)){S.xp-=xpNeed(S.level);S.level++;addCoins(50*S.level);toast("Новый уровень сада "+S.level+"!");msg("Уровень сада повышен! Награда: "+(50*S.level)+" монет");sound("level")}checkAch()}
-function pay(coins,dust){if((coins&&S.coins<coins)||(dust&&S.dust<dust)){msg("Не хватает валюты");sound("error");return false}if(coins)addCoins(-coins);if(dust)addDust(-dust);return true}
+function addRoots(n){S.rootCrystals=Math.max(0,Math.floor(S.rootCrystals+n));if(n>0){S.stats.rootTotal+=n;progressQuest("rootGain",n,{});sound("root")}}
+function addXp(n){if(S.upgrades.gloves)n=Math.ceil(n*1.2);if(S.underground.artifacts["Пыльный амулет"])n=Math.ceil(n*1.08);S.xp+=Math.max(0,Math.floor(n));while(S.xp>=xpNeed(S.level)){S.xp-=xpNeed(S.level);S.level++;addCoins(50*S.level);toast("Новый уровень сада "+S.level+"!");sound("level")}checkUndergroundUnlock();checkAch()}
+function checkUndergroundUnlock(){
+if(S.level>=6&&!S.underground.unlocked){S.underground.unlocked=true;S.secrets.underground=true;progressQuest("openUnder",1,{});toast("Открыто Подземелье Корней!");msg("Открыто Подземелье Корней! Здесь можно выращивать подземные растения и копать шахту.");S.uSeeds.stoneBeet=(S.uSeeds.stoneBeet||0)+1;S.underground.tutorial=false}
+}
+function pay(coins,dust,roots){if((coins&&S.coins<coins)||(dust&&S.dust<dust)||(roots&&S.rootCrystals<roots)){msg("Не хватает валюты");sound("error");return false}if(coins)addCoins(-coins);if(dust)addDust(-dust);if(roots)addRoots(-roots);return true}
 function addSeed(id,n=1){S.seeds[id]=(S.seeds[id]||0)+n}
-function addHarvest(id,n=1){S.harvest[id]=(S.harvest[id]||0)+n;S.collection[id]=true}
+function addUSeed(id,n=1){S.uSeeds[id]=(S.uSeeds[id]||0)+n}
+function addHarvest(id,n=1){S.harvest[id]=(S.harvest[id]||0)+n;if(plants[id])S.collection[id]=true;if(undergroundPlants[id])S.uCollection[id]=true}
 function addItem(id,n=1){S.items[id]=(S.items[id]||0)+n}
 function addChest(id,n=1){S.chests[id]=(S.chests[id]||0)+n}
-function unlockSecret(key,id){if(key)S.secrets[key]=true;if(id&&!S.secretPlants[id]){S.secretPlants[id]=true;addSeed(id,1);progressQuest("secretPlant",1,{});toast("Открыто секретное растение: "+plants[id].n);S.collection[id]=true}checkAch()}
+function addUChest(id,n=1){S.uChests[id]=(S.uChests[id]||0)+n}
+function unlockSecret(key,id){if(key)S.secrets[key]=true;if(id&&plants[id]&&!S.secretPlants[id]){S.secretPlants[id]=true;addSeed(id,1);progressQuest("secretPlant",1,{});toast("Открыто секретное растение: "+plants[id].n);S.collection[id]=true}checkAch()}
+function unlockUSecret(id){if(id==="rootHeart")S.secrets.rootBoss=true;if(!S.uCollection[id])S.uCollection[id]=true;addUSeed(id,1);toast("Открыто подземное растение: "+undergroundPlants[id].n);checkAch()}
 function unlockedPlant(id){let p=plants[id];if(p.secret)return !!S.secretPlants[id];return S.level>=p.lv}
-function saleValue(id,plot){let p=plants[id],v=p.s;if(plot&&plot.type==="gold")v=Math.ceil(v*1.2);if(Date.now()<S.effects.gold)v=Math.ceil(v*1.25);if(season()==="Лето"&&["strawberry","berry","blueberry","moonBerry"].includes(id))v=Math.ceil(v*1.2);if(season()==="Осень"&&["pumpkin","mushroom","royalPumpkin","shadowMushroom"].includes(id))v=Math.ceil(v*1.25);if(season()==="Зима"&&["lavender","iceStrawberry"].includes(id))v=Math.ceil(v*1.35);if((id==="blueberry"||id==="moonBerry")&&night())v=Math.ceil(v*1.35);return v}
+function unlockedUPlant(id){let p=undergroundPlants[id];if(!S.underground.unlocked)return false;if(p.secret)return !!S.uCollection[id];if(p.needArtifact)return !!S.underground.artifacts[p.needArtifact];return true}
+function saleValue(id,plot){let p=plants[id]||undergroundPlants[id],v=p.s;if(plot&&plot.type==="gold")v=Math.ceil(v*1.2);if(Date.now()<S.effects.gold)v=Math.ceil(v*1.25);if(season()==="Лето"&&["strawberry","berry","blueberry","moonBerry"].includes(id))v=Math.ceil(v*1.2);if(season()==="Осень"&&["pumpkin","mushroom","royalPumpkin","shadowMushroom"].includes(id))v=Math.ceil(v*1.25);if(season()==="Зима"&&["lavender"].includes(id))v=Math.ceil(v*1.35);if((id==="blueberry"||id==="moonBerry"||id==="glowOnion")&&night())v=Math.ceil(v*1.35);return v}
 function mutationValue(mid){for(let pid in mutations){let m=mutations[pid].find(x=>x[0]===mid);if(m)return Math.ceil(plants[pid].s*m[4])}return 100}
 function mutationData(mid){for(let pid in mutations){let m=mutations[pid].find(x=>x[0]===mid);if(m)return{base:pid,id:m[0],n:m[1],e:m[2],r:m[3],mul:m[4]}}return null}
 
-function render(){renderTop();renderPlots();renderInv();renderShop();renderQuests();renderAch();renderCol();renderSecrets();renderDaily()}
-function renderTop(){$("coins").textContent=S.coins;$("dust").textContent=S.dust;$("level").textContent=S.level;$("day").textContent=S.day;$("season").textContent=season();$("xpBar").style.width=clamp(S.xp/xpNeed(S.level)*100,0,100)+"%";$("eventName").textContent=S.active||"нет"}
+function render(){renderTop();renderView();renderInv();renderShop();renderQuests();renderAch();renderCol();renderSecrets();renderDaily()}
+function renderTop(){$("coins").textContent=S.coins;$("dust").textContent=S.dust;$("roots").textContent=S.rootCrystals;$("level").textContent=S.level;$("day").textContent=S.day;$("season").textContent=season();$("xpBar").style.width=clamp(S.xp/xpNeed(S.level)*100,0,100)+"%";$("eventName").textContent=S.active||"нет"}
+function renderView(){
+$("game").classList.toggle("underground",S.view==="underground");
+$("game").classList.toggle("mine",S.view==="mine");
+$("plots").classList.toggle("hidden",S.view!=="garden");
+$("uPlots").classList.toggle("hidden",S.view!=="underground");
+$("mineGrid").classList.toggle("hidden",S.view!=="mine");
+if(S.view==="garden")renderPlots();
+if(S.view==="underground")renderUPlots();
+if(S.view==="mine")renderMine();
+}
 function pStatus(p){if(p.boss>0)return"Король";if(!p.plant)return"пусто";if(p.crow)return"ворона";if(p.mole)return"крот";if(p.snail)return"улитка";if(p.slug)return"слизень";if(p.weeds)return"сорняк";if(p.bugs)return"жуки";if(p.dry)return"сухо";let pl=plants[p.plant];if(p.ready){if(pl.t==="single")return"готово";return p.fruitReady?"плод готов":"растёт плод"}return"растёт"}
 function pEmoji(p){if(p.boss>0)return"🌿👑";if(!p.plant)return"";if(p.mutation){let m=mutationData(p.mutation);return m?m.e:plants[p.plant].e}let pl=plants[p.plant];if(!p.ready){if(p.progress<pl.g*.33)return"🌰";if(p.progress<pl.g*.66)return"🌱"}return pl.e}
 function renderPlots(){let box=$("plots");box.innerHTML="";for(let i=0;i<S.plotCount;i++){let p=S.plots[i]||emptyPlot();S.plots[i]=p;let div=document.createElement("div");div.className="plot "+p.type+(p.dry?" dry":"")+(Date.now()<S.effects.fog?" fog":"")+(selectedItem?" sel":"");let html='<div class="plotTop"><span>'+(i+1)+" • "+plotTypeName(p.type)+'</span><span>'+pStatus(p)+'</span></div>';if(!p.plant&&!p.boss){html+='<div class="empty">Пустая грядка<br>выбери семена</div><div class="progress"><div class="bar"></div></div><div class="tags"></div><div class="plotBtns"><button data-act="upgradePlot">Улучшить</button></div>'}else{let perc=0;if(p.boss>0)perc=(1-p.boss/bossHpMax())*100;else{let pl=plants[p.plant];perc=(pl.t==="multi"&&p.ready)?p.fruitProgress/(pl.f||30)*100:p.progress/pl.g*100}html+='<div class="plant '+((p.ready||p.boss>0)?"ready":"")+'">'+pEmoji(p)+'</div><div class="progress"><div class="bar" style="width:'+clamp(perc,0,100)+'%"></div></div><div class="tags">';if(p.mutation)html+='<span class="tag">🧬</span>';if(p.weeds)html+='<span class="tag" data-act="weeds">🌾×'+p.weeds+'</span>';if(p.bugs)html+='<span class="tag" data-act="bugs">🐞</span>';if(p.dry)html+='<span class="tag">💧?</span>';if(p.snail)html+='<span class="tag" data-act="snail">🐌×'+p.snail+'</span>';if(p.crow)html+='<span class="tag" data-act="crow">🐦</span>';if(p.mole)html+='<span class="tag" data-act="mole">🕳️×'+p.mole+'</span>';if(p.slug)html+='<span class="tag" data-act="slug">🪱×'+p.slug+'</span>';if(p.bee)html+='<span class="tag">🐝</span>';if(p.sunspot)html+='<span class="tag" data-act="sunspot">☀️</span>';html+='</div><div class="plotBtns">';if(p.boss>0)html+='<button class="red" data-act="boss">Бить</button>';else{let pl=plants[p.plant];if(pl.t==="single"&&p.ready)html+='<button data-act="harvest">Собрать</button>';if(pl.t==="multi"&&p.fruitReady)html+='<button data-act="fruit">Плод</button>';if(pl.t==="multi")html+='<button class="red" data-act="uproot">Выкорч.</button>'}html+='</div>'}div.innerHTML=html;div.onclick=e=>plotClick(i,e);box.appendChild(div)}}
 function plotTypeName(t){return{normal:"обыч.",wet:"влаж.",gold:"золот.",moon:"лун.",protect:"защ.",fast:"быстр.",shadow:"тенев."}[t]||"обыч."}
-function renderInv(){let inv=$("inventory");inv.innerHTML="";if(invTab==="seeds"){allIds.forEach(id=>{let c=S.seeds[id]||0;if(c>0)card(inv,"itemCard seed "+RCLS[plants[id].r]+(selectedSeed===id?" sel":""),"🌰","Семена "+plants[id].n,c,()=>selectSeed(id))})}
-if(invTab==="harvest"){Object.keys(S.harvest).forEach(id=>{let c=S.harvest[id]||0;if(c>0){let isMut=id.startsWith("mut_"),m=isMut?mutationData(id.slice(4)):null,p=isMut?{n:m.n,e:m.e,r:m.r,s:mutationValue(m.id)}:plants[id];card(inv,"itemCard "+RCLS[p.r],p.e,p.n+"<br>"+sellText(id),c,()=>tapHarvest(id),S.heart[id]||0)}})}
-if(invTab==="heart"){Object.keys(S.heart).forEach(id=>{let h=S.heart[id]||0;if(h>0){let isMut=id.startsWith("mut_"),m=isMut?mutationData(id.slice(4)):null,p=isMut?{n:m.n,e:m.e,r:m.r}:plants[id];card(inv,"itemCard protected "+RCLS[p.r],p.e,p.n,h,()=>tapHarvest(id),h)}})}
-if(invTab==="chests"){let names={small:"Маленький сундук",rare:"Редкий сундук",gold:"Золотой сундук",mythic:"Мифический сундук",star:"Звёздный сундук",mystery:"Сундук тайн",garden:"Садовый сундук"},icons={small:"📦",rare:"🎁",gold:"🧰",mythic:"🔮",star:"🌟",mystery:"🕯️",garden:"🌳"};Object.keys(names).forEach(id=>{let c=S.chests[id]||0;if(c>0)card(inv,"itemCard chest",icons[id],names[id],c,()=>openChest(id))})}
-if(invTab==="items"){let items={fertilizer:["✨","Удобрение"],superFertilizer:["💥","Супер-удобрение"],mutFertilizer:["🧬","Мутационное удобрение"],starWater:["🌌","Звёздная вода"],antiPest:["🚫","Анти-вредитель"],moonTicket:["🎫","Лунный билет"],secretPack:["❓","Секретный пакет"]};Object.keys(items).forEach(id=>{let c=S.items[id]||0;if(c>0)card(inv,"itemCard tool"+(selectedItem===id?" sel":""),items[id][0],items[id][1],c,()=>selectItem(id))})}
-if(!inv.innerHTML)inv.innerHTML='<div style="padding:13px;font-weight:900">Тут пусто.</div>'}
+
+function uStatus(p){if(p.boss>0)return"Корнеед";if(!p.plant)return"пусто";if(p.stoneBug)return"жук";if(p.rootEater)return"корнеед";if(p.slime)return"слизь";if(p.blindCrow)return"ворона";if(p.wet)return"сырость";let pl=undergroundPlants[p.plant];if(p.ready){if(pl.t==="single")return"готово";return p.fruitReady?"плод готов":"растёт плод"}return"растёт"}
+function uEmoji(p){if(p.boss>0)return"🪱👑";if(!p.plant)return"";let pl=undergroundPlants[p.plant];if(!p.ready){if(p.progress<pl.g*.33)return"🪨";if(p.progress<pl.g*.66)return"🌱"}return pl.e}
+function renderUPlots(){
+let box=$("uPlots");box.innerHTML="";
+if(!S.underground.unlocked){box.innerHTML='<div class="rowBox" style="grid-column:1/-1"><b>🕳️ Подземелье закрыто</b><p>Откроется на 6 уровне сада.</p></div>';return}
+if(S.underground.uPlotCount===0){box.innerHTML='<div class="rowBox" style="grid-column:1/-1"><b>Подземелье открыто!</b><p>Купи первую подземную грядку в магазине.</p></div>';return}
+for(let i=0;i<S.underground.uPlotCount;i++){let p=S.underground.uPlots[i]||emptyUPlot();S.underground.uPlots[i]=p;let div=document.createElement("div");div.className="plot uPlot "+p.type+(p.slime?" slime":"")+(selectedItem?" sel":"");let html='<div class="plotTop"><span>'+(i+1)+" • "+uPlotName(p.type)+'</span><span>'+uStatus(p)+'</span></div>';if(!p.plant&&!p.boss){html+='<div class="empty">Подземная грядка<br>выбери подземные семена</div><div class="progress"><div class="bar"></div></div><div class="tags"></div><div class="plotBtns"><button data-uact="upgradeUPlot">Тип</button></div>'}else{let perc=0;if(p.boss>0)perc=(1-p.boss/rootBossHp())*100;else{let pl=undergroundPlants[p.plant];perc=(pl.t==="multi"&&p.ready)?p.fruitProgress/(pl.f||30)*100:p.progress/pl.g*100}html+='<div class="plant '+((p.ready||p.boss>0)?"ready":"")+'">'+uEmoji(p)+'</div><div class="progress"><div class="bar" style="width:'+clamp(perc,0,100)+'%"></div></div><div class="tags">';if(p.stoneBug)html+='<span class="tag" data-uact="stoneBug">🪲</span>';if(p.rootEater)html+='<span class="tag" data-uact="rootEater">🪱×'+p.rootEater+'</span>';if(p.slime)html+='<span class="tag" data-uact="slime">🟢×'+p.slime+'</span>';if(p.blindCrow)html+='<span class="tag" data-uact="blindCrow">🐦‍⬛</span>';if(p.wet)html+='<span class="tag" data-uact="wet">💦</span>';html+='</div><div class="plotBtns">';if(p.boss>0)html+='<button class="red" data-uact="rootBoss">Бить</button>';else{let pl=undergroundPlants[p.plant];if(pl.t==="single"&&p.ready)html+='<button data-uact="uHarvest">Собрать</button>';if(pl.t==="multi"&&p.fruitReady)html+='<button data-uact="uFruit">Плод</button>';if(pl.t==="multi")html+='<button class="red" data-uact="uUproot">Выкорч.</button>'}html+='</div>'}div.innerHTML=html;div.onclick=e=>uPlotClick(i,e);box.appendChild(div)}
+}
+function uPlotName(t){return{stone:"кам.",crystal:"крист.",mushroom:"гриб.",ancient:"древ.",warm:"тёпл."}[t]||"кам."}
+
+function renderMine(){
+let box=$("mineGrid");box.innerHTML="";
+if(!S.underground.unlocked){box.innerHTML='<div class="rowBox" style="grid-column:1/-1"><b>⛏️ Шахта закрыта</b><p>Откроется на 6 уровне сада.</p></div>';return}
+if(!S.underground.mine.length)resetMine(false);
+S.underground.mine.forEach((b,i)=>{let d=document.createElement("div");d.className="mineBlock "+(b.dug?"dug":"");d.innerHTML=b.dug?(b.icon||"⬛"):"🟫";d.onclick=()=>digBlock(i);box.appendChild(d)});
+}
+
+function renderInv(){
+let inv=$("inventory");inv.innerHTML="";
+if(invTab==="seeds"){
+allIds.forEach(id=>{let c=S.seeds[id]||0;if(c>0)card(inv,"itemCard seed "+RCLS[plants[id].r]+(selectedSeed===id?" sel":""),"🌰","Семена "+plants[id].n,c,()=>selectSeed(id))});
+uIds.forEach(id=>{let c=S.uSeeds[id]||0;if(c>0)card(inv,"itemCard seed undergroundR"+(selectedUSeed===id?" sel":""),"🪨","Подз. "+undergroundPlants[id].n,c,()=>selectUSeed(id))});
+}
+if(invTab==="harvest"){
+Object.keys(S.harvest).forEach(id=>{let c=S.harvest[id]||0;if(c>0){let isMut=id.startsWith("mut_"),m=isMut?mutationData(id.slice(4)):null,p=isMut?{n:m.n,e:m.e,r:m.r,s:mutationValue(m.id)}:(plants[id]||undergroundPlants[id]);card(inv,"itemCard "+(p?RCLS[p.r]:"common"),p?p.e:"📦",(p?p.n:id)+"<br>"+sellText(id),c,()=>tapHarvest(id),S.heart[id]||0)}})}
+if(invTab==="heart"){
+Object.keys(S.heart).forEach(id=>{let h=S.heart[id]||0;if(h>0){let isMut=id.startsWith("mut_"),m=isMut?mutationData(id.slice(4)):null,p=isMut?{n:m.n,e:m.e,r:m.r}:(plants[id]||undergroundPlants[id]);card(inv,"itemCard protected "+(p?RCLS[p.r]:"common"),p?p.e:"📦",p?p.n:id,h,()=>tapHarvest(id),h)}})}
+if(invTab==="chests"){
+let names={small:"Маленький сундук",rare:"Редкий сундук",gold:"Золотой сундук",mythic:"Мифический сундук",star:"Звёздный сундук",mystery:"Сундук тайн",garden:"Садовый сундук"},icons={small:"📦",rare:"🎁",gold:"🧰",mythic:"🔮",star:"🌟",mystery:"🕯️",garden:"🌳"};
+Object.keys(names).forEach(id=>{let c=S.chests[id]||0;if(c>0)card(inv,"itemCard chest",icons[id],names[id],c,()=>openChest(id))});
+let un={small:["📦","Малый подземный"],crystal:["💠","Кристальный"],ancient:["🏺","Древний"],boss:["🪱","Сундук Корнееда"]};
+Object.keys(un).forEach(id=>{let c=S.uChests[id]||0;if(c>0)card(inv,"itemCard chest undergroundR",un[id][0],un[id][1],c,()=>openUChest(id))});
+}
+if(invTab==="items"){
+let items={fertilizer:["✨","Удобрение"],superFertilizer:["💥","Супер-удобрение"],mutFertilizer:["🧬","Мутационное удобрение"],starWater:["🌌","Звёздная вода"],antiPest:["🚫","Анти-вредитель"],moonTicket:["🎫","Лунный билет"],secretPack:["❓","Секретный пакет"],undergroundFertilizer:["🪨","Подземное удобрение"],crystalWater:["💠","Кристальная вода"],rootTorch:["🔥","Факел корней"],ancientKey:["🗝️","Древний ключ"],stoneSeedItem:["🪨","Каменное семя"]};
+Object.keys(items).forEach(id=>{let c=S.items[id]||0;if(c>0)card(inv,"itemCard tool"+(selectedItem===id?" sel":""),items[id][0],items[id][1],c,()=>selectItem(id))});
+artifacts.forEach(a=>{if(S.underground.artifacts[a[0]])card(inv,"itemCard artifact",a[1],a[0],1,()=>msg(a[2]))});
+}
+if(!inv.innerHTML)inv.innerHTML='<div style="padding:13px;font-weight:900">Тут пусто.</div>';
+}
 function sellText(id){if(id.startsWith("mut_"))return mutationValue(id.slice(4))+" 🪙";return saleValue(id)+" 🪙"}
 function card(parent,cls,icon,name,count,click,heart){let d=document.createElement("div");d.className=cls;d.innerHTML='<div class="ic">'+icon+'</div><div class="nm">'+name+'</div><div class="ct">×'+count+'</div>'+(heart?'<div class="heart">❤️'+heart+'</div>':'');d.onclick=click;parent.appendChild(d)}
-function renderShop(){let list=$("shopList");if(!list)return;let html="";if(shopTab==="seeds"){baseIds.concat(secretIds).forEach(id=>{let p=plants[id],lock=!unlockedPlant(id);html+=shopPlantHTML(id,p,lock)})}
-if(shopTab==="upgrades"){html+=buyItemHTML("fertilizer","✨ Удобрение",80,0,"Ускоряет одну грядку.");html+=buyItemHTML("superFertilizer","💥 Супер-удобрение",250,0,"Сильно ускоряет грядку.");upgrades.forEach(u=>{let lock=S.level<u.lv,b=!!S.upgrades[u.id];html+='<div class="shopItem '+(lock?"lock":"")+'"><div class="shopTop"><div class="shopIcon">'+u.e+'</div><div><div class="shopName">'+u.n+'</div><div class="small">ур. '+u.lv+' • '+u.c+' 🪙</div></div></div><p class="small">'+u.d+'</p><button '+(lock||b?"disabled":"")+' onclick="game.buyUpgrade(\''+u.id+'\')">'+(b?"Куплено":lock?"Закрыто":"Купить")+'</button></div>'})}
-if(shopTab==="plots"){html+='<div class="shopItem"><div class="shopName">🌱 Новая грядка</div><p class="small">Лимит: '+plotLimit()+'. После 12 нужна покупка “Расширение сада”.</p><button onclick="game.buyPlot()">Купить за '+basePlotPrice()+' 🪙</button></div>';plotTypes.forEach(t=>{let lock=t.needSecret&&!S.secrets[t.needSecret];html+='<div class="shopItem '+(lock?"lock":"")+'"><div class="shopName">'+t.e+" "+t.n+'</div><p class="small">'+t.d+'</p><button '+(lock?"disabled":"")+' onclick="game.preparePlotType(\''+t.id+'\')">Выбрать улучшение '+costText(t)+'</button></div>'})}
+
+function renderShop(){
+let list=$("shopList");if(!list)return;let html="";
+if(shopTab==="seeds"){baseIds.concat(secretIds).forEach(id=>{let p=plants[id],lock=!unlockedPlant(id);html+=shopPlantHTML(id,p,lock,false)})}
+if(shopTab==="uSeeds"){if(!S.underground.unlocked)html+=lockedUnder();else uIds.forEach(id=>{let p=undergroundPlants[id],lock=!unlockedUPlant(id);html+=shopPlantHTML(id,p,lock,true)})}
+if(shopTab==="upgrades"){html+=buyItemHTML("fertilizer","✨ Удобрение",80,0,0,"Ускоряет одну грядку.");html+=buyItemHTML("superFertilizer","💥 Супер-удобрение",250,0,0,"Сильно ускоряет грядку.");upgrades.forEach(u=>{let lock=S.level<u.lv,b=!!S.upgrades[u.id];html+='<div class="shopItem '+(lock?"lock":"")+'"><div class="shopTop"><div class="shopIcon">'+u.e+'</div><div><div class="shopName">'+u.n+'</div><div class="small">ур. '+u.lv+' • '+u.c+' 🪙</div></div></div><p class="small">'+u.d+'</p><button '+(lock||b?"disabled":"")+' onclick="game.buyUpgrade(\''+u.id+'\')">'+(b?"Куплено":lock?"Закрыто":"Купить")+'</button></div>'})}
+if(shopTab==="plots"){html+='<div class="shopItem"><div class="shopName">🌱 Новая грядка</div><p class="small">Лимит: '+plotLimit()+'.</p><button onclick="game.buyPlot()">Купить за '+basePlotPrice()+' 🪙</button></div>';plotTypes.forEach(t=>{let lock=t.needSecret&&!S.secrets[t.needSecret];html+='<div class="shopItem '+(lock?"lock":"")+'"><div class="shopName">'+t.e+" "+t.n+'</div><p class="small">'+t.d+'</p><button '+(lock?"disabled":"")+' onclick="game.preparePlotType(\''+t.id+'\')">Выбрать '+costText(t)+'</button></div>'})}
+if(shopTab==="uPlots"){if(!S.underground.unlocked)html+=lockedUnder();else{let pr=uPlotPrice();html+='<div class="shopItem"><div class="shopName">🕳️ Новая подземная грядка</div><p class="small">Максимум 10. Сейчас: '+S.underground.uPlotCount+'/10</p><button onclick="game.buyUPlot()">Купить за '+pr.coins+' 🪙 + '+pr.roots+' 💠</button></div>';uPlotTypes.forEach(t=>{html+='<div class="shopItem"><div class="shopName">'+t.e+" "+t.n+'</div><p class="small">'+t.d+'</p><button onclick="game.prepareUPlotType(\''+t.id+'\')">Выбрать '+costText(t)+'</button></div>'})}}
 if(shopTab==="decor"){decorations.forEach(d=>{let b=!!S.decor[d.id];html+='<div class="shopItem"><div class="shopName">'+d.e+" "+d.n+'</div><p class="small">'+d.d+'</p><button '+(b?"disabled":"")+' onclick="game.buyDecor(\''+d.id+'\')">'+(b?"Куплено":"Купить "+costText(d))+'</button></div>'})}
-if(shopTab==="star"){html+=buyItemHTML("mutFertilizer","🧬 Мутационное удобрение",0,3,"Шанс мутации выбранной грядки 35%.");html+=buyItemHTML("starWater","🌌 Звёздная вода",0,2,"Ускоряет рост и помогает секретам.");html+=buyItemHTML("antiPest","🚫 Анти-вредитель",300,1,"Защита сада от вредителей.");html+=buyItemHTML("moonTicket","🎫 Лунный билет",0,3,"Вызывает ночное событие.");html+=buyItemHTML("secretPack","❓ Секретный пакет семян",0,5,"Даёт случайное секретное семя.");html+='<div class="shopItem"><div class="shopName">🌟 Звёздный сундук</div><p class="small">Пыль, секреты, мутационное удобрение.</p><button onclick="game.buyChestStar()">Купить за 8 ✨</button></div>'}
+if(shopTab==="star"){html+=buyItemHTML("mutFertilizer","🧬 Мутационное удобрение",0,3,0,"Шанс мутации 35%.");html+=buyItemHTML("starWater","🌌 Звёздная вода",0,2,0,"Ускоряет рост.");html+=buyItemHTML("antiPest","🚫 Анти-вредитель",300,1,0,"Защита сада.");html+=buyItemHTML("moonTicket","🎫 Лунный билет",0,3,0,"Вызывает ночное событие.");html+=buyItemHTML("secretPack","❓ Секретный пакет",0,5,0,"Секретное семя.");html+='<div class="shopItem"><div class="shopName">🌟 Звёздный сундук</div><button onclick="game.buyChestStar()">Купить за 8 ✨</button></div>'}
 if(shopTab==="tools"){tools.forEach(t=>{let b=!!S.tools[t.id];html+='<div class="shopItem"><div class="shopName">'+t.e+" "+t.n+'</div><p class="small">'+t.d+'</p><button '+(b?"disabled":"")+' onclick="game.buyTool(\''+t.id+'\')">'+(b?"Куплено":"Купить "+costText(t))+'</button></div>'})}
-list.innerHTML=html}
-function shopPlantHTML(id,p,lock){return'<div class="shopItem '+RCLS[p.r]+' '+(lock?"lock":"")+'"><div class="shopTop"><div class="shopIcon">'+p.e+'</div><div><div class="shopName">'+p.n+'</div><div class="small">'+rarity[p.r]+" • "+(p.t==="single"?"одноразовое":"многократное")+'</div></div></div><p class="small">'+p.d+'</p><div class="meta"><div>Семена: '+(p.c||"секрет")+' 🪙</div><div>Ур.: '+(p.secret?"секрет":p.lv)+'</div><div>Рост: '+p.g+' сек</div><div>Продажа: '+p.s+' 🪙</div></div><button '+(lock||p.secret?"disabled":"")+' onclick="game.buySeed(\''+id+'\')">'+(p.secret?(lock?"???":"Есть в секретах"):lock?"Закрыто":"Купить")+'</button></div>'}
-function costText(o){let s=[];if(o.coins||o.c)s.push((o.coins||o.c)+" 🪙");if(o.dust)s.push(o.dust+" ✨");return s.join(" + ")}
-function buyItemHTML(id,n,coins,dust,d){return'<div class="shopItem"><div class="shopName">'+n+'</div><p class="small">'+d+'</p><button onclick="game.buyItem(\''+id+'\','+coins+','+dust+')">Купить '+(coins?coins+" 🪙":"")+(coins&&dust?" + ":"")+(dust?dust+" ✨":"")+'</button></div>'}
+if(shopTab==="shovels"){if(!S.underground.unlocked)html+=lockedUnder();else shovels.forEach((t,idx)=>{let cur=shovelRank(S.underground.shovel),b=cur>=idx;html+='<div class="shopItem"><div class="shopName">'+t.e+" "+t.n+'</div><p class="small">'+t.d+'</p><button '+(b?"disabled":"")+' onclick="game.buyShovel(\''+t.id+'\')">'+(b?"Есть":"Купить "+costText(t))+'</button></div>'})}
+if(shopTab==="uItems"){if(!S.underground.unlocked)html+=lockedUnder();else{html+=buyItemHTML("undergroundFertilizer","🪨 Подземное удобрение",120,0,1,"Ускоряет подземную грядку.");html+=buyItemHTML("crystalWater","💠 Кристальная вода",200,0,2,"Шанс кристалла при сборе.");html+=buyItemHTML("rootTorch","🔥 Факел корней",180,0,2,"Меньше подземных вредителей.");html+=buyItemHTML("ancientKey","🗝️ Древний ключ",300,0,5,"Открывает древний сундук.");html+=buyItemHTML("stoneSeedItem","🪨 Каменное семя",500,0,10,"Нужно для Древнего Цветка.");}}
+list.innerHTML=html;
+}
+function lockedUnder(){return'<div class="shopItem lock"><div class="shopName">🕳️ Подземелье закрыто</div><p class="small">Откроется на 6 уровне сада.</p></div>'}
+function shopPlantHTML(id,p,lock,isU){let price=isU?(p.mc+" 🪙 + "+p.c+" 💠"):(p.c||"секрет")+" 🪙";let onclick=isU?"game.buyUSeed('"+id+"')":"game.buySeed('"+id+"')";return'<div class="shopItem '+RCLS[p.r]+' '+(lock?"lock":"")+'"><div class="shopTop"><div class="shopIcon">'+p.e+'</div><div><div class="shopName">'+p.n+'</div><div class="small">'+rarity[p.r]+" • "+(p.t==="single"?"одноразовое":"многократное")+'</div></div></div><p class="small">'+p.d+'</p><div class="meta"><div>Семена: '+price+'</div><div>Рост: '+p.g+' сек</div><div>Продажа: '+p.s+' 🪙</div><div>'+(isU?"подземное":"садовое")+'</div></div><button '+(lock?"disabled":"")+' onclick="'+onclick+'">'+(lock?"Закрыто":"Купить")+'</button></div>'}
+function costText(o){let s=[];if(o.coins||o.c)s.push((o.coins||o.c)+" 🪙");if(o.dust)s.push(o.dust+" ✨");if(o.roots)s.push(o.roots+" 💠");return s.join(" + ")}
+function buyItemHTML(id,n,coins,dust,roots,d){return'<div class="shopItem"><div class="shopName">'+n+'</div><p class="small">'+d+'</p><button onclick="game.buyItem(\''+id+'\','+coins+','+dust+','+roots+')">Купить '+(coins?coins+" 🪙":"")+(coins&&(dust||roots)?" + ":"")+(dust?dust+" ✨":"")+(dust&&roots?" + ":"")+(roots?roots+" 💠":"")+'</button></div>'}
+
 function renderQuests(){let h="";S.quests.forEach((q,i)=>{h+='<div class="rowBox"><b>'+q.text+'</b><p class="small">Прогресс: '+q.progress+'/'+q.need+'</p><button '+(q.progress<q.need?"disabled":"")+' onclick="game.claimQuest('+i+')">Забрать</button></div>'});$("questList").innerHTML=h}
 function renderAch(){let h="";achievements.forEach(a=>{let got=!!S.ach[a.id],can=achReady(a);h+='<div class="rowBox"><b>'+(got?"✅ ":"🏆 ")+a.n+'</b><p class="small">'+a.d+'</p><button '+(!can||got?"disabled":"")+' onclick="game.claimAch(\''+a.id+'\')">'+(got?"Получено":"Забрать")+'</button></div>'});$("achList").innerHTML=h}
-function renderCol(){let keys=Object.keys(S.collection),total=baseIds.length+secretIds.length+Object.values(mutations).reduce((a,b)=>a+b.length,0);let h='<div class="rowBox"><b>Открыто: '+keys.length+' / '+total+'</b><p class="small">Награды: 5 — 100 монет, 10 — 300 монет, 15 — редкий сундук, 25 — 5 пыли, 40 — мифический сундук.</p></div>';let all=[...baseIds,...secretIds];all.forEach(id=>{let p=plants[id],open=S.collection[id]||(!p.secret&&unlockedPlant(id));h+='<div class="itemCard '+RCLS[p.r]+'" style="display:inline-block;margin:4px"><div class="ic">'+(open?p.e:"❓")+'</div><div class="nm">'+(open?p.n:"???")+'</div><div class="ct">'+rarity[p.r]+'</div></div>'});Object.values(mutations).flat().forEach(m=>{let open=S.collection["mut_"+m[0]];h+='<div class="itemCard '+RCLS[m[3]]+'" style="display:inline-block;margin:4px"><div class="ic">'+(open?m[2]:"❓")+'</div><div class="nm">'+(open?m[1]:"???")+'</div><div class="ct">мутация</div></div>'});$("colList").innerHTML=h;collectionRewards()}
+function renderCol(){
+let h='<div class="rowBox"><b>📖 Обычная коллекция</b><p class="small">Открыто: '+Object.keys(S.collection).length+'</p></div>';
+baseIds.concat(secretIds).forEach(id=>{let p=plants[id],open=S.collection[id]||(!p.secret&&S.level>=p.lv);h+=miniCard(open?p.e:"❓",open?p.n:"???",rarity[p.r],RCLS[p.r])});
+h+='<div class="rowBox"><b>🕳️ Подземные находки</b><p class="small">Растения, артефакты, кристаллы и мини-босс.</p></div>';
+uIds.forEach(id=>{let p=undergroundPlants[id],open=S.uCollection[id]||S.uSeeds[id];h+=miniCard(open?p.e:"❓",open?p.n:"???",rarity[p.r],"undergroundR")});
+artifacts.forEach(a=>{let open=S.underground.artifacts[a[0]];h+=miniCard(open?a[1]:"❓",open?a[0]:"???","артефакт","artifact")});
+h+=miniCard(S.stats.rootBoss>0?"🪱":"❓",S.stats.rootBoss>0?"Гигантский Корнеед":"???","мини-босс","undergroundR");
+$("colList").innerHTML=h;
+}
+function miniCard(ic,n,ct,cls){return'<div class="itemCard '+cls+'" style="display:inline-block;margin:4px"><div class="ic">'+ic+'</div><div class="nm">'+n+'</div><div class="ct">'+ct+'</div></div>'}
 function renderSecrets(){let h="";secretHints.forEach(s=>{let open=!!S.secrets[s[0]];h+='<div class="rowBox"><b>'+(open?"✅ ":"🔒 ")+(open?s[2]:s[1])+'</b></div>'});$("secList").innerHTML=h}
-function renderDaily(){let can=S.daily.last!==today(),d=(S.daily.streak%7)+1,re=["50 монет","1 удобрение","2 семечка клубники","150 монет","супер-удобрение","редкое семечко","большой сундук"];$("dailyList").innerHTML='<div class="rowBox"><b>День '+d+'/7</b><p class="small">Сегодня: '+re[d-1]+'</p><button '+(!can?"disabled":"")+' onclick="game.claimDaily()">'+(can?"Забрать":"Уже получено")+'</button></div><div class="rowBox small">1 день — 50 монет<br>2 день — 1 удобрение<br>3 день — 2 семечка клубники<br>4 день — 150 монет<br>5 день — супер-удобрение<br>6 день — редкое семечко<br>7 день — большой сундук</div>'}
+function renderDaily(){let can=S.daily.last!==today(),d=(S.daily.streak%7)+1,re=["50 монет","1 удобрение","2 семечка клубники","150 монет","супер-удобрение","редкое семечко","большой сундук"];$("dailyList").innerHTML='<div class="rowBox"><b>День '+d+'/7</b><p class="small">Сегодня: '+re[d-1]+'</p><button '+(!can?"disabled":"")+' onclick="game.claimDaily()">'+(can?"Забрать":"Уже получено")+'</button></div>'}
 
-function selectSeed(id){selectedSeed=selectedSeed===id?null:id;selectedItem=null;msg(selectedSeed?"Выбраны семена: "+plants[id].n:"Семена отменены");render()}
-function selectItem(id){selectedItem=selectedItem===id?null:id;selectedSeed=null;msg(selectedItem?"Выбери грядку для предмета":"Предмет отменён");render()}
+function selectSeed(id){selectedSeed=selectedSeed===id?null:id;selectedUSeed=null;selectedItem=null;msg(selectedSeed?"Выбраны семена: "+plants[id].n:"Семена отменены");render()}
+function selectUSeed(id){selectedUSeed=selectedUSeed===id?null:id;selectedSeed=null;selectedItem=null;msg(selectedUSeed?"Выбраны подземные семена: "+undergroundPlants[id].n:"Семена отменены");render()}
+function selectItem(id){selectedItem=selectedItem===id?null:id;selectedSeed=null;selectedUSeed=null;msg(selectedItem?"Выбери грядку для предмета":"Предмет отменён");render()}
 function tapHarvest(id){let now=Date.now();if(lastTap.id===id&&now-lastTap.time<430){toggleHeart(id);lastTap={id:null,time:0}}else{lastTap={id,time:now};msg("Нажми ещё раз быстро, чтобы поставить или убрать ❤️")}}
 function toggleHeart(id){let c=S.harvest[id]||0;if(c<=0)return;let h=S.heart[id]||0;if(h<c){S.heart[id]=h+1;S.stats.heartKinds[id]=true;msg("Сердечко поставлено ❤️")}else{S.heart[id]=0;msg("Сердечки убраны")}if(Object.keys(S.stats.heartKinds).length>=5)unlockSecret("heart","heartRose");save();render()}
 function unheartAll(){if(confirm("Снять все сердечки?")){S.heart={};msg("Все сердечки сняты");save();render()}}
 
-function plotClick(i,e){let p=S.plots[i],act=e.target.dataset.act;if(act==="weeds"){hitWeed(p);return}if(act==="bugs"){p.bugs=false;defeat("bugs");msg("Жуки прогнаны");return}if(act==="snail"){p.snail--;if(p.snail<=0){p.snail=0;defeat("snail");msg("Улитка убежала")}else msg("Ещё "+p.snail+" нажатия");save();render();return}if(act==="crow"){p.crow=0;defeat("crow");msg("Ворона улетела");return}if(act==="mole"){p.mole--;if(p.mole<=0){p.mole=0;defeat("mole");msg("Крот убежал")}else msg("Ещё "+p.mole+" удар");save();render();return}if(act==="slug"){p.slug--;if(p.slug<=0){p.slug=0;defeat("slug");msg("Слизень убран")}else msg("Ещё "+p.slug+" нажатия");save();render();return}if(act==="sunspot"){p.sunspot=false;if(p.plant)p.progress+=plants[p.plant].g*.35;msg("Солнечный зайчик ускорил грядку");save();render();return}if(act==="boss"){hitBoss(p);return}if(act==="harvest"){harvestSingle(i);return}if(act==="fruit"){harvestFruit(i);return}if(act==="uproot"){uproot(i);return}if(act==="upgradePlot"){openPlotUpgrade(i);return}if(selectedItem){applyItem(i);return}if(!p.plant&&!p.boss){plantSeed(i);return}msg("Грядка занята")}
-function plantSeed(i){if(!selectedSeed){msg("Выбери семена");sound("error");return}if((S.seeds[selectedSeed]||0)<=0){msg("Нет семян");sound("error");return}if(!unlockedPlant(selectedSeed)){msg("Растение закрыто");sound("error");return}let p=S.plots[i];p.plant=selectedSeed;p.progress=0;p.ready=false;p.fruitReady=false;p.fruitProgress=0;p.mutation=null;p.mutBoost=false;S.seeds[selectedSeed]--;if(S.seeds[selectedSeed]<=0)selectedSeed=null;S.stats.planted++;S.collection[p.plant]=true;progressQuest("plant",1,{});addXp(2);msg("Посажено: "+plants[p.plant].n);sound("plant");checkAch();save();render()}
-function maybeMutation(p){if(!mutations[p.plant]||p.mutation)return;let chance=.05;if(p.type==="moon")chance=.12;if(Date.now()<S.effects.star)chance=.20;if(p.mutBoost)chance=.35;if(Math.random()<chance){let m=rand(mutations[p.plant]);p.mutation=m[0];S.collection["mut_"+m[0]]=true;S.mutations[m[0]]=true;S.stats.mutations++;progressQuest("mutation",1,{});toast("Мутация: "+m[1]);sound("star");checkAch()}}
-function harvestSingle(i){let p=S.plots[i],id=p.plant,pl=plants[id],amount=1;if(id==="watermelon"&&Math.random()<(.25+(S.upgrades.compost?.12:0)))amount=2;if(S.upgrades.compost&&Math.random()<.06)amount++;if(p.mutation){let mid="mut_"+p.mutation;addHarvest(mid,amount);msg("Мутация собрана: "+mutationData(p.mutation).n+" ×"+amount)}else{addHarvest(id,amount);msg(amount>1?"Двойной урожай: "+pl.n:"Урожай собран: "+pl.n)}if(id==="pumpkin"&&Math.random()<.35){let b=40+Math.floor(Math.random()*100);addCoins(b);toast("Бонус тыквы +"+b)}if(id==="pepper"){S.effects.pepper=Date.now()+45000;toast("Вредители отпуганы")}if(id==="dragon")addXp(120);if(id==="cometCucumber"&&Math.random()<.35)addDust(1);if(id==="royalPumpkin"&&Math.random()<.25)addChest("gold",1);S.stats.harvested+=amount;progressQuest("harvestPlant",amount,{plant:id});addXp(pl.xp);S.plots[i]=Object.assign(emptyPlot(),{type:p.type});sound("harvest");checkAch();save();render()}
-function harvestFruit(i){let p=S.plots[i],id=p.plant,pl=plants[id],amount=1;if(id==="rose"&&Math.random()<(.25+(S.upgrades.compost?.1:0)))amount=2;if(S.upgrades.compost&&Math.random()<.06)amount++;if(p.mutation){addHarvest("mut_"+p.mutation,amount);msg("Мутированный плод собран")}else addHarvest(id,amount),msg(amount>1?"Двойной плод: "+pl.n:"Плод собран: "+pl.n);S.stats.harvested+=amount;progressQuest("harvestPlant",amount,{plant:id});addXp(pl.xp);p.fruitReady=false;p.fruitProgress=0;sound("harvest");checkAch();save();render()}
+function plotClick(i,e){let p=S.plots[i],act=e.target.dataset.act;if(act==="weeds"){hitWeed(p);return}if(act==="bugs"){p.bugs=false;defeat("bugs");msg("Жуки прогнаны");return}if(act==="snail"){p.snail--;if(p.snail<=0){p.snail=0;defeat("snail");msg("Улитка убежала")}else msg("Ещё "+p.snail+" нажатия");save();render();return}if(act==="crow"){p.crow=0;defeat("crow");msg("Ворона улетела");return}if(act==="mole"){p.mole--;if(p.mole<=0){p.mole=0;defeat("mole");msg("Крот убежал")}else msg("Ещё "+p.mole+" удар");save();render();return}if(act==="slug"){p.slug--;if(p.slug<=0){p.slug=0;defeat("slug");msg("Слизень убран")}else msg("Ещё "+p.slug+" нажатия");save();render();return}if(act==="sunspot"){p.sunspot=false;if(p.plant)p.progress+=plants[p.plant].g*.35;msg("Солнечный зайчик ускорил грядку");save();render();return}if(act==="boss"){hitBoss(p);return}if(act==="harvest"){harvestSingle(i);return}if(act==="fruit"){harvestFruit(i);return}if(act==="uproot"){uproot(i);return}if(act==="upgradePlot"){openPlotUpgrade(i);return}if(selectedItem){applyItem(i,false);return}if(!p.plant&&!p.boss){plantSeed(i);return}msg("Грядка занята")}
+function uPlotClick(i,e){let p=S.underground.uPlots[i],act=e.target.dataset.uact;if(act==="stoneBug"){p.stoneBug=false;defeatU("stoneBug");msg("Каменный жук убран");return}if(act==="rootEater"){p.rootEater--;if(p.rootEater<=0){p.rootEater=0;defeatU("rootEater");msg("Корнеед убран")}else msg("Ещё "+p.rootEater+" удара");save();render();return}if(act==="slime"){p.slime--;if(p.slime<=0){p.slime=0;defeatU("slime");msg("Пещерная слизь очищена")}else msg("Ещё "+p.slime+" нажатия");save();render();return}if(act==="blindCrow"){p.blindCrow=0;defeatU("blindCrow");msg("Слепая ворона улетела");return}if(act==="wet"){p.wet=false;msg("Сырость убрана");save();render();return}if(act==="rootBoss"){hitRootBoss(p);return}if(act==="uHarvest"){harvestUSingle(i);return}if(act==="uFruit"){harvestUFruit(i);return}if(act==="uUproot"){uUproot(i);return}if(act==="upgradeUPlot"){openUPlotUpgrade(i);return}if(selectedItem){applyItem(i,true);return}if(!p.plant&&!p.boss){plantUSeed(i);return}msg("Подземная грядка занята")}
+
+function plantSeed(i){if(!selectedSeed){msg("Выбери семена");sound("error");return}if((S.seeds[selectedSeed]||0)<=0){msg("Нет семян");sound("error");return}if(!unlockedPlant(selectedSeed)){msg("Растение закрыто");sound("error");return}let p=S.plots[i];Object.assign(p,{plant:selectedSeed,progress:0,ready:false,fruitReady:false,fruitProgress:0,mutation:null,mutBoost:false});S.seeds[selectedSeed]--;if(S.seeds[selectedSeed]<=0)selectedSeed=null;S.stats.planted++;S.collection[p.plant]=true;progressQuest("plant",1,{});addXp(2);msg("Посажено: "+plants[p.plant].n);sound("plant");save();render()}
+function plantUSeed(i){if(!selectedUSeed){msg("Выбери подземные семена");sound("error");return}if((S.uSeeds[selectedUSeed]||0)<=0){msg("Нет подземных семян");sound("error");return}if(!unlockedUPlant(selectedUSeed)){msg("Подземное растение закрыто");sound("error");return}let p=S.underground.uPlots[i];Object.assign(p,{plant:selectedUSeed,progress:0,ready:false,fruitReady:false,fruitProgress:0,crystalBoost:false});S.uSeeds[selectedUSeed]--;if(S.uSeeds[selectedUSeed]<=0)selectedUSeed=null;S.uCollection[p.plant]=true;progressQuest("uPlant",1,{plant:p.plant});addXp(4);msg("Посажено под землёй: "+undergroundPlants[p.plant].n);sound("plant");save();render()}
+
+function maybeMutation(p){if(!mutations[p.plant]||p.mutation)return;let chance=.05;if(p.type==="moon")chance=.12;if(Date.now()<S.effects.star)chance=.20;if(p.mutBoost)chance=.35;if(Math.random()<chance){let m=rand(mutations[p.plant]);p.mutation=m[0];S.collection["mut_"+m[0]]=true;S.mutations[m[0]]=true;S.stats.mutations++;progressQuest("mutation",1,{});toast("Мутация: "+m[1]);sound("star")}}
+function harvestSingle(i){let p=S.plots[i],id=p.plant,pl=plants[id],amount=1;if(id==="watermelon"&&Math.random()<(.25+(S.upgrades.compost?.12:0)))amount=2;if(S.upgrades.compost&&Math.random()<.06)amount++;if(p.mutation){addHarvest("mut_"+p.mutation,amount);msg("Мутация собрана: "+mutationData(p.mutation).n)}else{addHarvest(id,amount);msg(amount>1?"Двойной урожай: "+pl.n:"Урожай собран: "+pl.n)}if(id==="pumpkin"&&Math.random()<.35){let b=40+Math.floor(Math.random()*100);addCoins(b);toast("Бонус тыквы +"+b)}if(id==="pepper"){S.effects.pepper=Date.now()+45000;toast("Вредители отпуганы")}if(id==="dragon")addXp(120);S.stats.harvested+=amount;progressQuest("harvestPlant",amount,{plant:id});addXp(pl.xp);S.plots[i]=Object.assign(emptyPlot(),{type:p.type});sound("harvest");save();render()}
+function harvestFruit(i){let p=S.plots[i],id=p.plant,pl=plants[id],amount=1;if(id==="rose"&&Math.random()<(.25+(S.upgrades.compost?.1:0)))amount=2;if(S.upgrades.compost&&Math.random()<.06)amount++;if(p.mutation)addHarvest("mut_"+p.mutation,amount);else addHarvest(id,amount);S.stats.harvested+=amount;progressQuest("harvestPlant",amount,{plant:id});addXp(pl.xp);p.fruitReady=false;p.fruitProgress=0;msg("Плод собран: "+pl.n);sound("harvest");save();render()}
+function harvestUSingle(i){let p=S.underground.uPlots[i],id=p.plant,pl=undergroundPlants[id],amount=1;addHarvest(id,amount);S.stats.uHarvested+=amount;progressQuest("uHarvest",1,{});addXp(pl.xp);if(id==="stoneBeet"&&Math.random()<.25)addRoots(1);if(id==="rootMelon"&&Math.random()<.25)addUChest("small",1);if(id==="rootHeart"){addRoots(10);addXp(150)}if(p.type==="crystal"&&Math.random()<.18)addRoots(1);if(p.crystalBoost&&Math.random()<.45)addRoots(1);S.underground.uPlots[i]=Object.assign(emptyUPlot(),{type:p.type});msg("Подземный урожай собран: "+pl.n);sound("harvest");save();render()}
+function harvestUFruit(i){let p=S.underground.uPlots[i],id=p.plant,pl=undergroundPlants[id];addHarvest(id,1);S.stats.uHarvested++;progressQuest("uHarvest",1,{});addXp(pl.xp);if(id==="diamondMushroom"&&Math.random()<.2)addRoots(1);if(id==="ancientFlower"&&Math.random()<.12)addDust(1);if(p.type==="crystal"&&Math.random()<.12)addRoots(1);if(p.crystalBoost&&Math.random()<.35)addRoots(1);p.fruitReady=false;p.fruitProgress=0;msg("Подземный плод собран: "+pl.n);sound("harvest");save();render()}
 function uproot(i){let p=S.plots[i];if(confirm("Выкорчевать "+plants[p.plant].n+"?")){S.plots[i]=Object.assign(emptyPlot(),{type:p.type});msg("Грядка очищена");save();render()}}
-function hitWeed(p){let dmg=S.tools.ironShears?99:S.tools.shears?2:1;if(S.tools.goldShears)dmg=4,p.weeds-=dmg;else p.weeds-=dmg;if(p.weeds<=0){p.weeds=0;S.stats.weeds++;defeat("weeds");if(S.tools.goldShears&&Math.random()<.08)addDust(1);msg("Сорняк убран")}else msg("Сорняк ослаблен");save();render()}
-function defeat(k){S.stats.pests++;progressQuest("pestKind",1,{kind:k});addXp(4);sound("win");checkAch();save();render()}
-function hitBoss(p){let dmg=1;if(S.tools.shears)dmg=2;if(S.tools.ironShears)dmg=4;if(S.tools.goldShears)dmg=7;p.boss-=dmg;if(p.boss<=0){p.boss=0;S.stats.boss++;progressQuest("boss",1,{});addCoins(250+Math.floor(Math.random()*300));addXp(120);addDust(1+Math.floor(Math.random()*3));if(Math.random()<.45){unlockSecret("boss","royalPumpkin");addSeed("royalPumpkin",1)}if(Math.random()<.55)addChest("rare",1);msg("Король Сорняков побеждён!");S.plots[S.plots.indexOf(p)]=Object.assign(emptyPlot(),{type:p.type});sound("win")}else msg("У Короля осталось сил: "+p.boss);checkAch();save();render()}
+function uUproot(i){let p=S.underground.uPlots[i];if(confirm("Выкорчевать "+undergroundPlants[p.plant].n+"?")){S.underground.uPlots[i]=Object.assign(emptyUPlot(),{type:p.type});msg("Подземная грядка очищена");save();render()}}
+
+function hitWeed(p){let dmg=S.tools.ironShears?99:S.tools.shears?2:1;if(S.tools.goldShears)dmg=4;p.weeds-=dmg;if(p.weeds<=0){p.weeds=0;S.stats.weeds++;defeat("weeds");if(S.tools.goldShears&&Math.random()<.08)addDust(1);msg("Сорняк убран")}else msg("Сорняк ослаблен");save();render()}
+function defeat(k){S.stats.pests++;progressQuest("pestKind",1,{kind:k});addXp(4);sound("win");save();render()}
+function defeatU(k){S.stats.pests++;addRoots(Math.random()<.35?1:0);addXp(7);sound("win");save();render()}
+function hitBoss(p){let dmg=1;if(S.tools.shears)dmg=2;if(S.tools.ironShears)dmg=4;if(S.tools.goldShears)dmg=7;p.boss-=dmg;if(p.boss<=0){p.boss=0;S.stats.boss++;addCoins(250+Math.floor(Math.random()*300));addXp(120);addDust(1+Math.floor(Math.random()*3));if(Math.random()<.45){unlockSecret("boss","royalPumpkin");addSeed("royalPumpkin",1)}if(Math.random()<.55)addChest("rare",1);msg("Король Сорняков побеждён!");S.plots[S.plots.indexOf(p)]=Object.assign(emptyPlot(),{type:p.type});sound("win")}else msg("У Короля осталось сил: "+p.boss);save();render()}
 function bossHpMax(){return S.tools.goldShears?18:S.tools.ironShears?16:S.tools.shears?14:12}
-function applyItem(i){let p=S.plots[i];if(selectedItem==="secretPack"){useSecretPack();return}if(selectedItem==="moonTicket"){S.items.moonTicket--;spawnStar(true);selectedItem=null;return}if(!p.plant&&!["antiPest"].includes(selectedItem)){msg("Нужна грядка с растением");sound("error");return}if((S.items[selectedItem]||0)<=0){selectedItem=null;render();return}let pl=p.plant?plants[p.plant]:null;if(selectedItem==="fertilizer"){S.items.fertilizer--;p.progress+=(pl?pl.g:50)*.35;msg("Удобрение применено")}if(selectedItem==="superFertilizer"){S.items.superFertilizer--;p.progress+=(pl?pl.g:50)*.75;msg("Супер-удобрение применено")}if(selectedItem==="mutFertilizer"){S.items.mutFertilizer--;p.mutBoost=true;msg("Шанс мутации повышен")}if(selectedItem==="starWater"){S.items.starWater--;p.progress+=(pl?pl.g:50)*.45;p.mutBoost=true;msg("Звёздная вода применена")}if(selectedItem==="antiPest"){S.items.antiPest--;S.effects.antiPest=Date.now()+60000;msg("Сад защищён от вредителей")}if((S.items[selectedItem]||0)<=0)selectedItem=null;tick(0);save();render()}
+function rootBossHp(){return 22+(shovelRank(S.underground.shovel)<2?8:0)}
+function hitRootBoss(p){let dmg=1+shovelRank(S.underground.shovel)*2;p.boss-=dmg;if(p.boss<=0){p.boss=0;S.stats.rootBoss++;progressQuest("rootBoss",1,{});addCoins(700+Math.floor(Math.random()*500));addXp(220);addRoots(8+Math.floor(Math.random()*10));addUChest("boss",1);if(Math.random()<.45)unlockUSecret("rootHeart");S.secrets.rootBoss=true;S.underground.uPlots[S.underground.uPlots.indexOf(p)]=Object.assign(emptyUPlot(),{type:p.type});msg("Гигантский Корнеед побеждён!");sound("win")}else msg("Гигантский Корнеед: "+p.boss+" HP");save();render()}
+
+function applyItem(i,isU){let p=isU?S.underground.uPlots[i]:S.plots[i];if(selectedItem==="secretPack"){useSecretPack();return}if(selectedItem==="moonTicket"){S.items.moonTicket--;spawnStar(true);selectedItem=null;return}if(selectedItem==="stoneSeedItem"){S.items.stoneSeedItem--;S.underground.artifacts["Каменное семя"]=true;progressQuest("artifact",1,{});msg("Каменное семя стало артефактом. Древний Цветок открыт.");selectedItem=null;save();render();return}if(!p.plant&&selectedItem!=="antiPest"&&selectedItem!=="rootTorch"){msg("Нужна грядка с растением");sound("error");return}if((S.items[selectedItem]||0)<=0){selectedItem=null;render();return}
+if(isU){
+let pl=undergroundPlants[p.plant];
+if(selectedItem==="undergroundFertilizer"){S.items.undergroundFertilizer--;p.progress+=pl.g*.45;msg("Подземное удобрение применено")}
+else if(selectedItem==="crystalWater"){S.items.crystalWater--;p.crystalBoost=true;msg("Кристальная вода применена")}
+else if(selectedItem==="rootTorch"){S.items.rootTorch--;S.effects.rootTorch=Date.now()+60000;msg("Факел корней защищает подземелье")}
+else{msg("Этот предмет лучше использовать в обычном саду");sound("error")}
+}else{
+let pl=plants[p.plant];
+if(selectedItem==="fertilizer"){S.items.fertilizer--;p.progress+=pl.g*.35;msg("Удобрение применено")}
+else if(selectedItem==="superFertilizer"){S.items.superFertilizer--;p.progress+=pl.g*.75;msg("Супер-удобрение применено")}
+else if(selectedItem==="mutFertilizer"){S.items.mutFertilizer--;p.mutBoost=true;msg("Шанс мутации повышен")}
+else if(selectedItem==="starWater"){S.items.starWater--;p.progress+=pl.g*.45;p.mutBoost=true;msg("Звёздная вода применена")}
+else if(selectedItem==="antiPest"){S.items.antiPest--;S.effects.antiPest=Date.now()+60000;msg("Сад защищён")}
+else{msg("Этот предмет лучше использовать под землёй");sound("error")}
+}
+if((S.items[selectedItem]||0)<=0)selectedItem=null;tick(0);tickU(0);save();render()}
 function useSecretPack(){S.items.secretPack--;let locked=secretIds.filter(id=>!S.secretPlants[id]);let id=locked.length?rand(locked):rand(secretIds);unlockSecret("shop",id);if((S.items.secretPack||0)<=0)selectedItem=null;msg("Секретный пакет дал семена: "+plants[id].n);save();render()}
-function openPlotUpgrade(i){let txt="Выбери тип грядки в магазине → Грядки, потом нажми на грядку.";msg(txt);$("shopModal").classList.add("show");shopTab="plots";renderShop();S.preparePlot=i}
-function preparePlotType(type){let i=S.preparePlot;if(i===undefined){msg("Сначала нажми “Улучшить” на грядке");return}let t=plotTypes.find(x=>x.id===type);if(!t)return;if(t.needSecret&&!S.secrets[t.needSecret]){msg("Сначала открой секрет");return}if(!pay(t.coins||0,t.dust||0))return;S.plots[i].type=type;S.stats.plotUp++;progressQuest("plotUpgrade",1,{});if(type==="moon")S.secrets.moon=true;msg("Грядка улучшена: "+t.n);S.preparePlot=undefined;save();render()}
-function buySeed(id){let p=plants[id];if(!unlockedPlant(id)){msg("Растение закрыто");sound("error");return}if(!pay(p.c,0))return;addSeed(id,1);progressQuest("buySeed",1,{});msg("Куплены семена: "+p.n);sound("buy");save();render()}
-function buyPlot(){if(S.plotCount>=plotLimit()){msg(S.upgrades.expansion?"Максимум грядок":"Нужно Расширение сада");sound("error");return}let pr=basePlotPrice();if(!pay(pr,0))return;S.plotCount++;S.plots.push(emptyPlot());progressQuest("buyPlot",1,{});msg("Куплена новая грядка");sound("buy");save();render()}
-function buyUpgrade(id){let u=upgrades.find(x=>x.id===id);if(!u)return;if(S.upgrades[id])return;if(S.level<u.lv){msg("Нужен уровень "+u.lv);return}if(!pay(u.c,0))return;S.upgrades[id]=true;msg("Куплено: "+u.n);sound("buy");save();render()}
-function buyItem(id,coins,dust){if(!pay(coins,dust))return;addItem(id,1);msg("Куплен предмет");sound("buy");save();render()}
-function buyDecor(id){let d=decorations.find(x=>x.id===id);if(!d||S.decor[id])return;if(!pay(d.coins||0,d.dust||0))return;S.decor[id]=true;S.stats.decor++;progressQuest("decor",1,{});msg("Куплено украшение: "+d.n);sound("buy");save();render()}
-function buyTool(id){let t=tools.find(x=>x.id===id);if(!t||S.tools[id])return;if(!pay(t.coins||0,t.dust||0))return;S.tools[id]=true;msg("Куплен инструмент: "+t.n);sound("buy");save();render()}
-function buyChestStar(){if(!pay(0,8))return;addChest("star",1);msg("Куплен звёздный сундук");sound("buy");save();render()}
+
+function openPlotUpgrade(i){msg("Выбери тип грядки в магазине → Грядки.");$("shopModal").classList.add("show");shopTab="plots";renderShop();S.preparePlot=i}
+function preparePlotType(type){let i=S.preparePlot;if(i===undefined){msg("Сначала нажми “Улучшить” на грядке");return}let t=plotTypes.find(x=>x.id===type);if(!t)return;if(t.needSecret&&!S.secrets[t.needSecret]){msg("Сначала открой секрет");return}if(!pay(t.coins||0,t.dust||0,0))return;S.plots[i].type=type;S.stats.plotUp++;if(type==="moon")S.secrets.moon=true;msg("Грядка улучшена: "+t.n);S.preparePlot=undefined;save();render()}
+function openUPlotUpgrade(i){msg("Выбери тип подземной грядки в магазине → Подз. грядки.");$("shopModal").classList.add("show");shopTab="uPlots";renderShop();S.prepareUPlot=i}
+function prepareUPlotType(type){let i=S.prepareUPlot;if(i===undefined){msg("Сначала нажми “Тип” на подземной грядке");return}let t=uPlotTypes.find(x=>x.id===type);if(!t)return;if(!pay(t.coins||0,0,t.roots||0))return;S.underground.uPlots[i].type=type;msg("Подземная грядка улучшена: "+t.n);S.prepareUPlot=undefined;save();render()}
+
+function buySeed(id){let p=plants[id];if(!unlockedPlant(id)){msg("Растение закрыто");sound("error");return}if(!pay(p.c,0,0))return;addSeed(id,1);progressQuest("buySeed",1,{});msg("Куплены семена: "+p.n);sound("buy");save();render()}
+function buyUSeed(id){let p=undergroundPlants[id];if(!unlockedUPlant(id)){msg("Подземное растение закрыто");sound("error");return}if(!pay(p.mc||0,0,p.c||0))return;addUSeed(id,1);msg("Куплены подземные семена: "+p.n);sound("buy");save();render()}
+function buyPlot(){if(S.plotCount>=plotLimit()){msg(S.upgrades.expansion?"Максимум грядок":"Нужно Расширение сада");sound("error");return}let pr=basePlotPrice();if(!pay(pr,0,0))return;S.plotCount++;S.plots.push(emptyPlot());progressQuest("buyPlot",1,{});msg("Куплена новая грядка");sound("buy");save();render()}
+function buyUPlot(){if(!S.underground.unlocked){msg("Подземелье закрыто");return}if(S.underground.uPlotCount>=10){msg("Максимум подземных грядок");return}let pr=uPlotPrice();if(!pay(pr.coins,0,pr.roots))return;S.underground.uPlotCount++;S.underground.uPlots.push(emptyUPlot());progressQuest("buyUPlot",1,{});msg("Куплена подземная грядка");sound("buy");save();render()}
+function buyUpgrade(id){let u=upgrades.find(x=>x.id===id);if(!u)return;if(S.upgrades[id])return;if(S.level<u.lv){msg("Нужен уровень "+u.lv);return}if(!pay(u.c,0,0))return;S.upgrades[id]=true;msg("Куплено: "+u.n);sound("buy");save();render()}
+function buyItem(id,coins,dust,roots){if(!pay(coins,dust,roots))return;addItem(id,1);msg("Куплен предмет");sound("buy");save();render()}
+function buyDecor(id){let d=decorations.find(x=>x.id===id);if(!d||S.decor[id])return;if(!pay(d.coins||0,d.dust||0,0))return;S.decor[id]=true;S.stats.decor++;msg("Куплено украшение: "+d.n);sound("buy");save();render()}
+function buyTool(id){let t=tools.find(x=>x.id===id);if(!t||S.tools[id])return;if(!pay(t.coins||0,t.dust||0,0))return;S.tools[id]=true;msg("Куплен инструмент: "+t.n);sound("buy");save();render()}
+function shovelRank(id){return{none:-1,basic:0,iron:1,crystal:2,ancient:3}[id]??-1}
+function buyShovel(id){let t=shovels.find(x=>x.id===id);if(!t)return;if(shovelRank(S.underground.shovel)>=shovelRank(id))return;if(!pay(t.coins||0,0,t.roots||0))return;S.underground.shovel=id;progressQuest("shovel",1,{});msg("Лопата улучшена: "+t.n);sound("buy");save();render()}
+function buyChestStar(){if(!pay(0,8,0))return;addChest("star",1);msg("Куплен звёздный сундук");sound("buy");save();render()}
+
 function waterAll(){if(!S.upgrades.watering&&!S.upgrades.goldWatering){msg("Сначала купи лейку");sound("error");return}let boost=S.upgrades.goldWatering?.24:.13,n=0;S.plots.forEach(p=>{if(p.dry){p.dry=false;n++}if(p.plant&&!p.ready)p.progress+=plants[p.plant].g*boost});msg(n?"Сухие грядки восстановлены":"Растения политы");save();render()}
-function sell(type){let total=0;Object.keys(S.harvest).forEach(id=>{let count=S.harvest[id]||0,prot=S.heart[id]||0,free=Math.max(0,count-prot);if(free<=0)return;let r,v;if(id.startsWith("mut_")){let m=mutationData(id.slice(4));r=m.r;v=mutationValue(m.id)}else{r=plants[id].r;v=saleValue(id)}if(type==="common"&&r!=="common")free=0;if(type==="safe"&&r!=="common")free=0;if(free>0){total+=free*v;S.harvest[id]-=free}});if(total<=0){msg("Нет растений для продажи");sound("error");return}addCoins(total);S.stats.sold+=total;progressQuest("sellCoins",total,{});addXp(Math.ceil(total/15));msg("Продано на "+total+" монет");sound("sell");checkAch();save();render()}
-function openChest(id){if((S.chests[id]||0)<=0)return;S.chests[id]--;let text="";if(id==="small"){if(Math.random()<.55){let c=40+Math.floor(Math.random()*80);addCoins(c);text=c+" монет"}else{let p=rand(["carrot","strawberry","chamomile"]);addSeed(p,1);text="семена "+plants[p].n}}if(id==="rare"){if(Math.random()<.55){let p=rand(["sunflower","cactus","pepper","mushroom"]);addSeed(p,1);text="редкие семена"}else{addItem("fertilizer",2);text="2 удобрения"}}if(id==="gold"){let c=180+Math.floor(Math.random()*280);addCoins(c);text=c+" монет";if(Math.random()<.45)addSeed(rand(["pumpkin","mint","watermelon","lavender"]),1),text+=" + эпические семена"}if(id==="mythic"){let c=300+Math.floor(Math.random()*550);addCoins(c);text=c+" монет";if(Math.random()<.25)addSeed(rand(["dragon","blueberry"]),1),text+=" + мифические семена"}if(id==="star"){addDust(1+Math.floor(Math.random()*3));text="звёздная пыль";if(Math.random()<.35)addItem("mutFertilizer",1),text+=" + мутационное удобрение";if(Math.random()<.18)unlockSecret("star",rand(secretIds))}if(id==="mystery"){let p=rand(secretIds);unlockSecret("shop",p);text="секретное семя"}if(id==="garden"){if(Math.random()<.45){let c=120+Math.floor(Math.random()*180);addCoins(c);text=c+" монет"}else addItem("fertilizer",2),text="удобрения"}progressQuest("openChest",1,{});addXp(20);msg("Сундук открыт: "+text);sound("chest");save();render()}
+function sell(type){let total=0;Object.keys(S.harvest).forEach(id=>{let count=S.harvest[id]||0,prot=S.heart[id]||0,free=Math.max(0,count-prot);if(free<=0)return;let r,v;if(id.startsWith("mut_")){let m=mutationData(id.slice(4));r=m.r;v=mutationValue(m.id)}else{let p=plants[id]||undergroundPlants[id];r=p?p.r:"common";v=saleValue(id)}if(type==="common"&&r!=="common")free=0;if(type==="safe"&&r!=="common")free=0;if(free>0){total+=free*v;S.harvest[id]-=free}});if(total<=0){msg("Нет растений для продажи");sound("error");return}addCoins(total);S.stats.sold+=total;progressQuest("sellCoins",total,{});addXp(Math.ceil(total/15));msg("Продано на "+total+" монет");sound("sell");save();render()}
+
+function openChest(id){if((S.chests[id]||0)<=0)return;S.chests[id]--;let text="";if(id==="small"){if(Math.random()<.55){let c=40+Math.floor(Math.random()*80);addCoins(c);text=c+" монет"}else{let p=rand(["carrot","strawberry","chamomile"]);addSeed(p,1);text="семена "+plants[p].n}}if(id==="rare"){if(Math.random()<.55){let p=rand(["sunflower","cactus","pepper","mushroom"]);addSeed(p,1);text="редкие семена"}else{addItem("fertilizer",2);text="2 удобрения"}}if(id==="gold"){let c=180+Math.floor(Math.random()*280);addCoins(c);text=c+" монет";if(Math.random()<.45)addSeed(rand(["pumpkin","mint","watermelon","lavender"]),1),text+=" + эпические семена"}if(id==="mythic"){let c=300+Math.floor(Math.random()*550);addCoins(c);text=c+" монет";if(Math.random()<.25)addSeed(rand(["dragon","blueberry"]),1),text+=" + мифические семена"}if(id==="star"){addDust(1+Math.floor(Math.random()*3));text="звёздная пыль";if(Math.random()<.35)addItem("mutFertilizer",1);if(Math.random()<.18)unlockSecret("star",rand(Object.keys(plants).filter(id=>plants[id].secret)))}if(id==="mystery"){let p=rand(Object.keys(plants).filter(id=>plants[id].secret));unlockSecret("shop",p);text="секретное семя"}if(id==="garden"){if(Math.random()<.45){let c=120+Math.floor(Math.random()*180);addCoins(c);text=c+" монет"}else addItem("fertilizer",2),text="удобрения"}addXp(20);msg("Сундук открыт: "+text);sound("chest");save();render()}
+function openUChest(id){if((S.uChests[id]||0)<=0)return;S.uChests[id]--;let text="";if(id==="small"){addCoins(80+Math.floor(Math.random()*120));if(Math.random()<.55)addUSeed(rand(["stoneBeet","glowOnion"]),1);if(Math.random()<.45)addRoots(1);text="монеты, семена или кристаллы"}if(id==="crystal"){addRoots(3+Math.floor(Math.random()*5));if(Math.random()<.35)findArtifact();text="корневые кристаллы"}if(id==="ancient"){if((S.items.ancientKey||0)>0)S.items.ancientKey--;findArtifact();if(Math.random()<.5)addUSeed(rand(["caveMint","rootMelon","diamondMushroom"]),1);text="древняя находка"}if(id==="boss"){addRoots(6+Math.floor(Math.random()*8));if(Math.random()<.45)unlockUSecret("rootHeart");if(Math.random()<.45)findArtifact();text="награда Корнееда"}addXp(35);msg("Подземный сундук открыт: "+text);sound("chest");save();render()}
+function findArtifact(){let locked=artifacts.filter(a=>!S.underground.artifacts[a[0]]);if(!locked.length)return false;let a=rand(locked);S.underground.artifacts[a[0]]=true;S.stats.artifactsFound++;progressQuest("artifact",1,{});if(a[0]==="Каменное семя")S.uCollection.ancientFlower=true;toast("Артефакт: "+a[0]);return true}
+
+function resetMine(saveIt=true){S.underground.mine=[];for(let i=0;i<12;i++)S.underground.mine.push({dug:false,icon:""});S.underground.mineReset=Date.now()+90000;if(saveIt)save()}
+function digBlock(i){
+if(!S.underground.unlocked){msg("Шахта закрыта");return}
+let b=S.underground.mine[i];if(!b||b.dug)return;b.dug=true;S.stats.mineDug++;progressQuest("mine",1,{});
+let rank=shovelRank(S.underground.shovel),r=Math.random(),bonus=rank*.04;
+let text="";
+if(r<.18){let c=20+Math.floor(Math.random()*80);addCoins(c);b.icon="🪙";text="найдены монеты"}
+else if(r<.34+bonus){let n=1+(rank>=2&&Math.random()<.35?1:0);addRoots(n);b.icon="💠";text="найдены корневые кристаллы"}
+else if(r<.48+bonus){let id=rand(["stoneBeet","glowOnion","caveMint"]);addUSeed(id,1);b.icon="🌰";text="найдены подземные семена"}
+else if(r<.58+bonus){addItem("stoneSeedItem",1);b.icon="🪨";text="найдено каменное семя"}
+else if(r<.68+bonus){addChest("small",1);b.icon="📦";text="маленький сундук"}
+else if(r<.78+bonus){addUChest("small",1);S.stats.uChestsMined++;b.icon="🕳️";text="подземный сундук"}
+else if(r<.88+bonus){if(Math.random()<.5)spawnRootMole();else{b.icon="🐦‍⬛";text="слепая ворона унесла часть находки"}}
+else{if(findArtifact()){b.icon="🏺";text="старый артефакт"}else{addRoots(1);b.icon="💠";text="кристалл"}}
+msg("Шахта: "+text);sound("mine");checkAch();save();render();
+if(S.underground.mine.every(x=>x.dug))setTimeout(()=>{resetMine();render()},800);
+}
+
 function claimDaily(){if(S.daily.last===today())return;S.daily.last=today();let d=(S.daily.streak%7)+1;if(d===1)addCoins(50);if(d===2)addItem("fertilizer",1);if(d===3)addSeed("strawberry",2);if(d===4)addCoins(150);if(d===5)addItem("superFertilizer",1);if(d===6)addSeed(rand(["sunflower","cactus","pepper","mushroom"]),1);if(d===7)addChest("gold",1),addChest("rare",1);S.daily.streak=(S.daily.streak%7)+1;msg("Ежедневный бонус получен");sound("chest");save();render()}
 
-function genQuests(){S.quests=[];let pool=[...questTemplates];while(S.quests.length<3){let q=pool.splice(Math.floor(Math.random()*pool.length),1)[0];S.quests.push(JSON.parse(JSON.stringify({...q,progress:0})))}}
-function progressQuest(type,amount,data){S.quests.forEach(q=>{if(q.progress>=q.need)return;if(q.type!==type)return;if(q.plant&&data.plant!==q.plant)return;if(q.kind&&data.kind!==q.kind)return;if(type==="collection")amount=Object.keys(S.collection).length;if(type==="dustTotal")amount=S.stats.dustTotal;q.progress=clamp((type==="collection"||type==="dustTotal")?amount:q.progress+amount,0,q.need)})}
-function give(r){if(!r)return;if(r.coins)addCoins(r.coins);if(r.dust)addDust(r.dust);if(r.xp)addXp(r.xp);if(r.item)addItem(r.item,r.count||1);if(r.seed)addSeed(r.seed,r.count||1);if(r.chest)addChest(r.chest,r.count||1)}
-function claimQuest(i){let q=S.quests[i];if(!q||q.progress<q.need)return;give(q.reward);msg("Задание выполнено: "+q.text);sound("quest");S.quests.splice(i,1);let used=S.quests.map(x=>x.id),pool=questTemplates.filter(x=>!used.includes(x.id));S.quests.push(JSON.parse(JSON.stringify({...rand(pool),progress:0})));save();render()}
-function achReady(a){if(a.id==="firstPlant")return S.stats.planted>=1;if(a.id==="firstHarvest")return S.stats.harvested>=1;if(a.id==="farmer")return S.stats.sold>=500;if(a.id==="defender")return S.stats.pests>=10;if(a.id==="collector")return Object.keys(S.stats.heartKinds).length>=5;if(a.id==="secret")return Object.keys(S.secrets).length>=1;if(a.id==="mutant")return S.stats.mutations>=1;if(a.id==="stargazer")return S.stats.stars>=5;if(a.id==="moonFarmer")return S.plots.some(p=>p.type==="moon");if(a.id==="weedKing")return S.stats.boss>=1;if(a.id==="secretSeed")return Object.keys(S.secretPlants).length>=1;if(a.id==="legendGarden")return Object.keys(S.mutations).length>=5;return false}
-function checkAch(){achievements.forEach(a=>{if(!S.ach[a.id]&&achReady(a))toast("Достижение готово: "+a.n)});progressQuest("collection",0,{})}
+function genQuests(){S.quests=[];let pool=[...questTemplates];while(S.quests.length<4&&pool.length){let q=pool.splice(Math.floor(Math.random()*pool.length),1)[0];S.quests.push(JSON.parse(JSON.stringify({...q,progress:0})))}}
+function progressQuest(type,amount,data){S.quests.forEach(q=>{if(q.progress>=q.need)return;if(q.type!==type)return;if(q.plant&&data.plant!==q.plant)return;if(q.kind&&data.kind!==q.kind)return;q.progress=clamp(q.progress+amount,0,q.need)})}
+function give(r){if(!r)return;if(r.coins)addCoins(r.coins);if(r.dust)addDust(r.dust);if(r.roots)addRoots(r.roots);if(r.xp)addXp(r.xp);if(r.item)addItem(r.item,r.count||1);if(r.seed)addSeed(r.seed,r.count||1);if(r.seedU)addUSeed(r.seedU,r.count||1);if(r.chest)addChest(r.chest,r.count||1);if(r.uChest)addUChest(r.uChest,r.count||1)}
+function claimQuest(i){let q=S.quests[i];if(!q||q.progress<q.need)return;give(q.reward);msg("Задание выполнено: "+q.text);sound("quest");S.quests.splice(i,1);let used=S.quests.map(x=>x.id),pool=questTemplates.filter(x=>!used.includes(x.id));if(pool.length)S.quests.push(JSON.parse(JSON.stringify({...rand(pool),progress:0})));save();render()}
+function achReady(a){
+if(a.id==="firstPlant")return S.stats.planted>=1;if(a.id==="firstHarvest")return S.stats.harvested>=1;if(a.id==="farmer")return S.stats.sold>=500;if(a.id==="defender")return S.stats.pests>=10;if(a.id==="collector")return Object.keys(S.stats.heartKinds).length>=5;if(a.id==="mutant")return S.stats.mutations>=1;
+if(a.id==="firstDescent")return S.underground.unlocked;if(a.id==="digger")return S.stats.mineDug>=50;if(a.id==="crystalFarmer")return S.stats.rootTotal>=25;if(a.id==="archaeologist")return Object.keys(S.underground.artifacts).length>=5;if(a.id==="underGardener")return S.stats.uHarvested>=20;if(a.id==="rootBossWin")return S.stats.rootBoss>=1;if(a.id==="depthHeart")return !!S.uCollection.rootHeart;if(a.id==="luckyMiner")return S.stats.uChestsMined>=1;if(a.id==="ancientGarden")return !!S.uCollection.ancientFlower||!!S.underground.artifacts["Каменное семя"];if(a.id==="fullDepth")return S.underground.uPlotCount>=10;return false
+}
+function checkAch(){achievements.forEach(a=>{if(!S.ach[a.id]&&achReady(a))toast("Достижение готово: "+a.n)})}
 function claimAch(id){let a=achievements.find(x=>x.id===id);if(!a||S.ach[id]||!achReady(a))return;S.ach[id]=true;give(a.reward);msg("Получено достижение: "+a.n);sound("quest");save();render()}
-function collectionRewards(){let n=Object.keys(S.collection).length;if(n>=5&&!S.col5){S.col5=true;addCoins(100);toast("Коллекция 5: +100 монет")}if(n>=10&&!S.col10){S.col10=true;addCoins(300);toast("Коллекция 10: +300 монет")}if(n>=15&&!S.col15){S.col15=true;addChest("rare",1);toast("Коллекция 15: редкий сундук")}if(n>=25&&!S.col25){S.col25=true;addDust(5);toast("Коллекция 25: +5 пыли")}if(n>=40&&!S.col40){S.col40=true;addChest("mythic",1);toast("Коллекция 40: мифический сундук")}}
 
-function tick(dt){let now=Date.now();S.plots.forEach((p,i)=>{if(!p.plant)return;let pl=plants[p.plant],speed=1;if(season()==="Весна")speed*=1.12;if(season()==="Зима")speed*=.8;if(Date.now()<S.effects.sun)speed*=1.75;if(Date.now()<S.effects.fog)speed*=.62;if(S.decor.fountain)speed*=1.05;if(p.type==="fast")speed*=1.15;if(p.type==="shadow"&&(pl.secret||night()))speed*=1.25;if((pl.secret||idNight(p.plant))&&S.decor.moonLamp&&night())speed*=1.2;if(p.dry)speed*=.45;if(p.weeds)speed*=.68;if(p.bugs)speed*=.72;if(p.snail||p.crow)speed=0;if(p.mole)speed*=.45;if(p.slug&&pl.t==="multi")speed*=.25;if(near(i,"mint"))speed*=1.22;if(nearBee(i))speed*=1.25;if(p.sunspot)speed*=1.18;if(p.boss>0)speed*=.4;if(pl.t==="multi"&&p.ready){if(!p.fruitReady){p.fruitProgress+=dt*speed;if(p.fruitProgress>=pl.f){p.fruitProgress=pl.f;p.fruitReady=true}}}else{p.progress+=dt*speed;if(p.progress>=pl.g){p.progress=pl.g;p.ready=true;maybeMutation(p)}}if(p.bee>0)p.bee=Math.max(0,p.bee-dt)})}
-function idNight(id){return["mushroom","blueberry","moonBerry","shadowMushroom","ghostTurnip"].includes(id)}
+function tick(dt){
+let now=Date.now();S.plots.forEach((p,i)=>{if(!p.plant)return;let pl=plants[p.plant],speed=1;if(season()==="Весна")speed*=1.12;if(season()==="Зима")speed*=.8;if(now<S.effects.sun)speed*=1.75;if(now<S.effects.fog)speed*=.62;if(S.decor.fountain)speed*=1.05;if(p.type==="fast")speed*=1.15;if(p.type==="shadow"&&(pl.secret||night()))speed*=1.25;if(p.dry)speed*=.45;if(p.weeds)speed*=.68;if(p.bugs)speed*=.72;if(p.snail||p.crow)speed=0;if(p.mole)speed*=.45;if(p.slug&&pl.t==="multi")speed*=.25;if(near(i,"mint"))speed*=1.22;if(p.sunspot)speed*=1.18;if(p.boss>0)speed*=.4;if(pl.t==="multi"&&p.ready){if(!p.fruitReady){p.fruitProgress+=dt*speed;if(p.fruitProgress>=pl.f){p.fruitProgress=pl.f;p.fruitReady=true}}}else{p.progress+=dt*speed;if(p.progress>=pl.g){p.progress=pl.g;p.ready=true;maybeMutation(p)}}});
+}
+function tickU(dt){
+let now=Date.now();if(!S.underground.unlocked)return;let bossExists=S.underground.uPlots.some(p=>p.boss>0);S.underground.uPlots.forEach((p,i)=>{if(!p.plant)return;let pl=undergroundPlants[p.plant],speed=1;if(S.underground.artifacts["Древний горшок"])speed*=1.08;if(p.type==="mushroom"&&p.plant.includes("Mushroom"))speed*=1.25;if(p.type==="ancient")speed*=1.08;if(p.wet&&p.type!=="warm")speed*=.55;if(p.stoneBug)speed*=.65;if(p.rootEater)speed=0;if(p.slime)speed*=.35;if(bossExists)speed*=.55;if(nearU(i,"caveMint"))speed*=1.2;if(pl.t==="multi"&&p.ready){if(!p.fruitReady){let need=pl.f;if(p.plant==="glowOnion"&&night())speed*=1.35;if(p.plant==="shadowMushroom"&&Date.now()<S.effects.fog)speed*=1.35;p.fruitProgress+=dt*speed;if(p.fruitProgress>=need){p.fruitProgress=need;p.fruitReady=true}}}else{p.progress+=dt*speed;if(p.progress>=pl.g){p.progress=pl.g;p.ready=true}}})
+}
 function near(i,id){let c=innerWidth>=450?3:2;return[i-1,i+1,i-c,i+c].some(n=>n>=0&&n<S.plotCount&&S.plots[n].plant===id&&S.plots[n].ready)}
-function nearBee(i){let c=innerWidth>=450?3:2;return[i-1,i+1,i-c,i+c].some(n=>n>=0&&n<S.plotCount&&S.plots[n].bee>0)}
-function nearLav(i){let c=innerWidth>=450?3:2;return[i-1,i+1,i-c,i+c].some(n=>n>=0&&n<S.plotCount&&S.plots[n].plant==="lavender"&&S.plots[n].ready)}
+function nearU(i,id){let c=innerWidth>=450?3:2;return[i-1,i+1,i-c,i+c].some(n=>n>=0&&n<S.underground.uPlotCount&&S.underground.uPlots[n].plant===id&&S.underground.uPlots[n].ready)}
 function updateDay(){let now=Date.now();while(now-S.lastDay>=DAY_MS){S.lastDay+=DAY_MS;S.day++;S.seasonDay++;if(S.seasonDay>4){S.seasonDay=1;S.seasonIndex=(S.seasonIndex+1)%4;msg("Новый сезон: "+season())}}}
-function randomBad(){if(Date.now()<S.effects.pepper||Date.now()<S.effects.antiPest)return;let filled=S.plots.map((p,i)=>p.plant?i:null).filter(x=>x!==null);if(!filled.length)return;let chance=.011;if(season()==="Лето"||Date.now()<S.effects.hot)chance+=.008;if(S.decor.knightScarecrow)chance*=.65;if(S.upgrades.ironScarecrow)chance*=.7;else if(S.upgrades.scarecrow)chance*=.82;if(S.decor.path)chance*=.9;if(Math.random()>chance)return;let i=rand(filled),p=S.plots[i],pl=plants[p.plant];if(p.type==="protect"&&Math.random()<.55)return;if(nearLav(i)&&Math.random()<.42)return;let ops=["weeds","dry","snail","mole","crow"];if(pl.t==="multi")ops.push("slug");if(p.plant!=="cactus")ops.push("bugs");let ev=rand(ops);if(ev==="weeds"&&!p.weeds){p.weeds=S.tools.ironShears?1:2;msg("Появились сорняки")}if(ev==="dry"&&!p.dry&&p.type!=="wet"){p.dry=true;msg("Засуха")}if(ev==="bugs"&&!p.bugs){p.bugs=true;msg("Появились жуки")}if(ev==="snail"&&!p.snail){p.snail=3;msg("Улитка-Обжора")}if(ev==="mole"&&!p.mole){p.mole=2;msg("Крот роет грядку")}if(ev==="crow"&&!p.crow&&!p.ready){p.crow=1;msg("Ворона хочет унести росток")}if(ev==="slug"&&!p.slug){p.slug=3;msg("Слизень задерживает плод")}sound("pest")}
-function randomGood(){let ch=.006;if(S.decor.bench)ch+=.003;if(night()&&S.plots.some(p=>p.plant==="mushroom"&&p.ready))ch+=.003;if(Math.random()>ch)return;let ops=["sun","rain","gold","gift","gnome","sunspot","fog","hot","bee","star"];let ev=rand(ops);if(ev==="sun"){S.effects.sun=Date.now()+30000;S.active="Солнечный день";S.stats.sunEvents++;if(S.stats.sunEvents>=3)unlockSecret("shop","sunCarrot");msg("Солнечный день: рост быстрее")}if(ev==="rain"){S.plots.forEach(p=>p.dry=false);S.active="Дождь";msg("Дождь полил грядки")}if(ev==="gold"){S.effects.gold=Date.now()+30000;S.active="Золотой час";msg("Золотой час: продажа +25%")}if(ev==="gift")spawnGift();if(ev==="gnome")spawnFloat("🧙","Садовый гном","Случайный бонус",gnomeReward);if(ev==="sunspot")spawnSunspot();if(ev==="fog"){S.effects.fog=Date.now()+30000;S.active="Туман";unlockSecret("fog","ghostTurnip");unlockSecret("fog","shadowMushroom");msg("Туман накрыл сад")}if(ev==="hot"){S.effects.hot=Date.now()+30000;S.active="Жаркий день";msg("Жаркий день: чаще засуха")}if(ev==="bee")spawnBee();if(ev==="star"&&(night()||S.items.moonTicket>0))spawnStar()}
-function spawnGift(){let g=$("gift");g.style.left=(15+Math.random()*70)+"%";g.style.top=(25+Math.random()*34)+"%";g.classList.add("show");S.active="Подарочный ящик";msg("Появился подарочный ящик");setTimeout(()=>g.classList.remove("show"),9000)}
-function openGift(){let g=$("gift");if(!g.classList.contains("show"))return;g.classList.remove("show");let r=Math.random();if(r<.3){let c=35+Math.floor(Math.random()*120);addCoins(c);msg("В подарке "+c+" монет")}else if(r<.5){addItem("fertilizer",1);msg("В подарке удобрение")}else if(r<.68){addSeed(rand(["carrot","strawberry","chamomile","sunflower"]),1);msg("В подарке семена")}else if(r<.88){addChest("small",1);msg("В подарке сундук")}else{addDust(1);msg("В подарке звёздная пыль")}sound("chest");save();render()}
-function spawnStar(force){if(!force&&Math.random()>.35+(S.decor.starTotem?.18:0))return;$("starEvent").classList.add("show");S.effects.star=Date.now()+25000;S.active="Падение звезды";S.stats.nightEvents++;unlockSecret("star","cometCucumber");sound("star");setTimeout(()=>$("starEvent").classList.remove("show"),9000)}
-function catchStar(){$("starEvent").classList.remove("show");let d=1+Math.floor(Math.random()*3);addDust(d);S.stats.stars++;progressQuest("star",1,{});if(Math.random()<.18)unlockSecret("star",rand(secretIds));msg("Поймана звезда: +"+d+" пыли");sound("star");checkAch();save();render()}
-function spawnFloat(ic,title,text,fn){$("floatIcon").textContent=ic;$("floatTitle").textContent=title;$("floatText").textContent=text;$("floatEvent").classList.add("show");$("floatBtn").onclick=()=>{fn();$("floatEvent").classList.remove("show")};setTimeout(()=>$("floatEvent").classList.remove("show"),9000)}
-function gnomeReward(){let r=Math.random();if(r<.25){let c=100+Math.floor(Math.random()*250);addCoins(c);msg("Гном дал "+c+" монет")}else if(r<.45){addItem("superFertilizer",1);msg("Гном дал супер-удобрение")}else if(r<.65){addSeed(rand(baseIds.filter(id=>plants[id].lv<=S.level)),1);msg("Гном дал семена")}else if(r<.85){addXp(120);msg("Гном дал опыт")}else{addDust(1);msg("Гном дал звёздную пыль")}sound("quest");save();render()}
-function spawnSunspot(){let f=S.plots.map((p,i)=>p.plant?i:null).filter(x=>x!==null);if(!f.length)return;S.plots[rand(f)].sunspot=true;msg("На грядке солнечный зайчик")}
-function spawnBee(){let c=S.plots.map((p,i)=>p.plant==="chamomile"&&p.ready?i:null).filter(x=>x!==null);if(!c.length)return;S.plots[rand(c)].bee=25;msg("Пчёлка помогает ромашке")}
-function maybeBoss(){if(S.level<5)return;if(S.plots.some(p=>p.boss>0))return;if(Math.random()<.0015){let empty=S.plots.map((p,i)=>!p.plant&&!p.boss?i:null).filter(x=>x!==null);let i=empty.length?rand(empty):Math.floor(Math.random()*S.plotCount);S.plots[i]=Object.assign(emptyPlot(),{type:S.plots[i].type,boss:bossHpMax()});S.secrets.boss=true;S.active="Король Сорняков";msg("Появился Король Сорняков!");sound("pest")}}
+function randomBad(){if(Date.now()<S.effects.pepper||Date.now()<S.effects.antiPest)return;let filled=S.plots.map((p,i)=>p.plant?i:null).filter(x=>x!==null);if(!filled.length)return;let chance=.011;if(season()==="Лето"||Date.now()<S.effects.hot)chance+=.008;if(S.decor.knightScarecrow)chance*=.65;if(S.upgrades.ironScarecrow)chance*=.7;else if(S.upgrades.scarecrow)chance*=.82;if(Math.random()>chance)return;let i=rand(filled),p=S.plots[i],pl=plants[p.plant];if(p.type==="protect"&&Math.random()<.55)return;let ops=["weeds","dry","snail","mole","crow"];if(pl.t==="multi")ops.push("slug");if(p.plant!=="cactus")ops.push("bugs");let ev=rand(ops);if(ev==="weeds"&&!p.weeds){p.weeds=S.tools.ironShears?1:2;msg("Появились сорняки")}if(ev==="dry"&&!p.dry&&p.type!=="wet"){p.dry=true;msg("Засуха")}if(ev==="bugs"&&!p.bugs){p.bugs=true;msg("Появились жуки")}if(ev==="snail"&&!p.snail){p.snail=3;msg("Улитка-Обжора")}if(ev==="mole"&&!p.mole){p.mole=2;msg("Крот роет грядку")}if(ev==="crow"&&!p.crow&&!p.ready){p.crow=1;msg("Ворона хочет унести росток")}if(ev==="slug"&&!p.slug){p.slug=3;msg("Слизень задерживает плод")}sound("pest")}
+function randomUBad(){if(!S.underground.unlocked||Date.now()<S.effects.rootTorch)return;let filled=S.underground.uPlots.map((p,i)=>p.plant?i:null).filter(x=>x!==null);if(!filled.length)return;let chance=.012;if(S.underground.artifacts["Корневая маска"])chance*=.75;if(Math.random()>chance)return;let i=rand(filled),p=S.underground.uPlots[i],ops=["stoneBug","rootEater","slime","wet"];if(Math.random()<.2)ops.push("blindCrow");let ev=rand(ops);if(ev==="stoneBug"&&!p.stoneBug){p.stoneBug=true;msg("Каменный Жук замедляет растение")}if(ev==="rootEater"&&!p.rootEater){p.rootEater=3;msg("Корнеед остановил рост")}if(ev==="slime"&&!p.slime&&p.type!=="warm"){p.slime=3;msg("Пещерная слизь залила грядку")}if(ev==="wet"&&!p.wet&&p.type!=="warm"){p.wet=true;msg("Подземная сырость")}if(ev==="blindCrow"&&!p.blindCrow){p.blindCrow=1;msg("Слепая ворона появилась")}sound("pest")}
+function randomGood(){let ch=.006;if(S.decor.bench)ch+=.003;if(night()&&S.plots.some(p=>p.plant==="mushroom"&&p.ready))ch+=.003;if(Math.random()>ch)return;let ops=["sun","rain","gold","gift","gnome","sunspot","fog","hot","star"];let ev=rand(ops);if(ev==="sun"){S.effects.sun=Date.now()+30000;S.active="Солнечный день";S.stats.sunEvents++;msg("Солнечный день: рост быстрее")}if(ev==="rain"){S.plots.forEach(p=>p.dry=false);S.active="Дождь";msg("Дождь полил грядки")}if(ev==="gold"){S.effects.gold=Date.now()+30000;S.active="Золотой час";msg("Золотой час: продажа +25%")}if(ev==="gift")spawnGift();if(ev==="gnome")spawnFloat("🧙","Садовый гном","Случайный бонус",gnomeReward);if(ev==="sunspot")spawnSunspot();if(ev==="fog"){S.effects.fog=Date.now()+30000;S.active="Туман";unlockSecret("fog","ghostTurnip");unlockSecret("fog","shadowMushroom");msg("Туман накрыл сад")}if(ev==="hot"){S.effects.hot=Date.now()+30000;S.active="Жаркий день";msg("Жаркий день: чаще засуха")}if(ev==="star"&&(night()||S.items.moonTicket>0))spawnStar()}
+function maybeRootBoss(){if(!S.underground.unlocked)return;if(S.underground.uPlots.some(p=>p.boss>0))return;if(S.underground.uPlotCount<2)return;if(Math.random()<.0018){let empty=S.underground.uPlots.map((p,i)=>!p.plant&&!p.boss?i:null).filter(x=>x!==null);let i=empty.length?rand(empty):Math.floor(Math.random()*S.underground.uPlotCount);S.underground.uPlots[i]=Object.assign(emptyUPlot(),{type:S.underground.uPlots[i].type,boss:rootBossHp()});S.active="Гигантский Корнеед";S.secrets.rootBoss=true;msg("Появился Гигантский Корнеед!");sound("boss")}}
+function maybeRootMole(){if(!S.underground.unlocked||S.rootCrystals<=0)return;if(Math.random()<.0025)spawnRootMole()}
+function spawnRootMole(){$("rootMole").classList.add("show");sound("pest");setTimeout(()=>{if($("rootMole").classList.contains("show")){let loss=Math.min(S.rootCrystals,1+Math.floor(Math.random()*3));addRoots(-loss);$("rootMole").classList.remove("show");msg("Крот-вор украл "+loss+" кристалла")}},5500)}
+function catchRootMole(){$("rootMole").classList.remove("show");progressQuest("rootMole",1,{});addRoots(1);addXp(20);msg("Крот-вор убежал! +1 кристалл");sound("win");save();render()}
+function maybeBoss(){if(S.level<5)return;if(S.plots.some(p=>p.boss>0))return;if(Math.random()<.0012){let empty=S.plots.map((p,i)=>!p.plant&&!p.boss?i:null).filter(x=>x!==null);let i=empty.length?rand(empty):Math.floor(Math.random()*S.plotCount);S.plots[i]=Object.assign(emptyPlot(),{type:S.plots[i].type,boss:bossHpMax()});S.active="Король Сорняков";msg("Появился Король Сорняков!");sound("pest")}}
 function maybeThief(){let have=Object.keys(S.harvest).filter(id=>(S.harvest[id]||0)>(S.heart[id]||0));if(!have.length||$("thief").classList.contains("show"))return;let ch=.003;if(S.upgrades.ironScarecrow)ch*=.35;else if(S.upgrades.scarecrow)ch*=.55;if(S.decor.knightScarecrow)ch*=.65;if(Math.random()<ch)spawnThief()}
 function spawnThief(){thiefLeft=5;$("thiefTime").textContent=thiefLeft;$("thief").classList.add("show");sound("pest");clearInterval(thiefTimer);thiefTimer=setInterval(()=>{thiefLeft--;$("thiefTime").textContent=thiefLeft;if(thiefLeft<=0)thiefSteal()},1000)}
 function catchThief(){clearInterval(thiefTimer);$("thief").classList.remove("show");S.stats.thieves++;progressQuest("thief",1,{});addXp(12);msg("Воришка убежал");sound("win");save();render()}
 function thiefSteal(){clearInterval(thiefTimer);$("thief").classList.remove("show");let have=Object.keys(S.harvest).filter(id=>(S.harvest[id]||0)>(S.heart[id]||0));if(!have.length)return;let id=rand(have);S.harvest[id]--;msg("Воришка украл урожай");save();render()}
-function crowDamage(){S.plots.forEach(p=>{if(p.crow&&Math.random()<.06&&p.plant&&!p.ready&&p.progress<plants[p.plant].g*.45){msg("Ворона унесла росток");let t=p.type;Object.assign(p,emptyPlot(),{type:t})}})}
+function spawnGift(){let g=$("gift");g.style.left=(15+Math.random()*70)+"%";g.style.top=(25+Math.random()*34)+"%";g.classList.add("show");S.active="Подарочный ящик";msg("Появился подарочный ящик");setTimeout(()=>g.classList.remove("show"),9000)}
+function openGift(){let g=$("gift");if(!g.classList.contains("show"))return;g.classList.remove("show");let r=Math.random();if(r<.3){let c=35+Math.floor(Math.random()*120);addCoins(c);msg("В подарке "+c+" монет")}else if(r<.5){addItem("fertilizer",1);msg("В подарке удобрение")}else if(r<.68){addSeed(rand(["carrot","strawberry","chamomile","sunflower"]),1);msg("В подарке семена")}else if(r<.88){addChest("small",1);msg("В подарке сундук")}else{addRoots(1);msg("В подарке корневой кристалл")}sound("chest");save();render()}
+function spawnStar(force){if(!force&&Math.random()>.35+(S.decor.starTotem?.18:0))return;$("starEvent").classList.add("show");S.effects.star=Date.now()+25000;S.active="Падение звезды";S.stats.nightEvents++;sound("star");setTimeout(()=>$("starEvent").classList.remove("show"),9000)}
+function catchStar(){$("starEvent").classList.remove("show");let d=1+Math.floor(Math.random()*3);addDust(d);S.stats.stars++;if(Math.random()<.18)unlockSecret("star",rand(Object.keys(plants).filter(id=>plants[id].secret)));msg("Поймана звезда: +"+d+" пыли");sound("star");save();render()}
+function spawnFloat(ic,title,text,fn){$("floatIcon").textContent=ic;$("floatTitle").textContent=title;$("floatText").textContent=text;$("floatEvent").classList.add("show");$("floatBtn").onclick=()=>{fn();$("floatEvent").classList.remove("show")};setTimeout(()=>$("floatEvent").classList.remove("show"),9000)}
+function gnomeReward(){let r=Math.random();if(r<.25){let c=100+Math.floor(Math.random()*250);addCoins(c);msg("Гном дал "+c+" монет")}else if(r<.45){addItem("superFertilizer",1);msg("Гном дал супер-удобрение")}else if(r<.65){addSeed(rand(baseIds.filter(id=>plants[id].lv<=S.level)),1);msg("Гном дал семена")}else if(r<.85){addXp(120);msg("Гном дал опыт")}else{addRoots(2);msg("Гном дал корневые кристаллы")}sound("quest");save();render()}
+function spawnSunspot(){let f=S.plots.map((p,i)=>p.plant?i:null).filter(x=>x!==null);if(!f.length)return;S.plots[rand(f)].sunspot=true;msg("На грядке солнечный зайчик")}
 function autoWater(){if(!S.upgrades.autoWater)return;if(Math.random()<.012){let d=S.plots.find(p=>p.dry);if(d){d.dry=false;msg("Автополив спас грядку")}}}
-function clearEvents(){let now=Date.now();if(now>S.effects.sun&&S.active==="Солнечный день")S.active="нет";if(now>S.effects.gold&&S.active==="Золотой час")S.active="нет";if(now>S.effects.fog&&S.active==="Туман")S.active="нет";if(now>S.effects.hot&&S.active==="Жаркий день")S.active="нет";if(now>S.effects.star&&S.active==="Падение звезды")S.active="нет"}
+function clearEvents(){let now=Date.now();["sun","gold","fog","hot","star"].forEach(k=>{if(now>S.effects[k]&&S.active!=="Гигантский Корнеед"&&S.active!=="Король Сорняков")S.active="нет"})}
 
-function exportSave(){let code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("saveCode").value=code;$("saveCode").focus();$("saveCode").select();msg("Код сохранения создан")}
-function importSave(){let code=$("saveCode").value.trim();try{let obj=JSON.parse(decodeURIComponent(escape(atob(code))));if(!obj||typeof obj.coins!=="number"||!obj.plots)throw 0;S=merge(defState(),obj);fixSaveAfterUpdate();save();applySettings();msg("Сохранение импортировано");render()}catch(e){msg("Неправильный код сохранения");sound("error")}}
-function resetGame(){if(confirm("Точно начать новую игру?")){localStorage.removeItem(SAVE);S=defState();genQuests();selectedSeed=null;selectedItem=null;save();applySettings();render();showTut();msg("Новая игра началась")}}
+function exportSave(){S.saveVersion=GAME_VERSION;let code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("saveCode").value=code;$("saveCode").focus();$("saveCode").select();msg("Код сохранения v1.3 создан")}
+function importSave(){let code=$("saveCode").value.trim();try{let obj=JSON.parse(decodeURIComponent(escape(atob(code))));if(!obj||typeof obj.coins!=="number")throw 0;S=obj;migrateSave();save();applySettings();msg("Сохранение импортировано и обновлено до v1.3");render()}catch(e){msg("Неправильный код сохранения");sound("error")}}
+function resetGame(){if(confirm("Точно начать новую игру?")){localStorage.removeItem(SAVE);S=defState();genQuests();selectedSeed=null;selectedUSeed=null;selectedItem=null;save();applySettings();render();showTut();msg("Новая игра v1.3 началась")}}
 function applySettings(){document.body.classList.toggle("noanim",!S.settings.anim);document.body.classList.toggle("compact",!!S.settings.compact);$("soundToggle").textContent=S.settings.sound?"🔊 Звук ВКЛ":"🔇 Звук ВЫКЛ";$("animToggle").textContent=S.settings.anim?"✨ Анимации ВКЛ":"🚫 Анимации ВЫКЛ";$("compactToggle").textContent=S.settings.compact?"📱 Компакт ВКЛ":"📱 Компакт ВЫКЛ"}
 function showTut(){if(S.tutorial)return;tut=0;$("tutorialModal").classList.add("show");renderTut()}
-function renderTut(){let a=["1. Купи семена в магазине.","2. Нажми на пустую грядку, чтобы посадить.","3. Подожди рост.","4. Собери урожай.","5. Нажми “Продать всё”, чтобы заработать.","6. Двойное нажатие по урожаю ставит сердечко.","7. Сердечко защищает от продажи и воришки.","8. Иногда растения мутируют.","9. Звёздная пыль нужна для редких покупок.","10. Секретные растения открываются особыми условиями."];$("tutorialText").textContent=a[tut];$("nextTut").textContent=tut>=a.length-1?"Готово":"Дальше"}
-function closeTut(){S.tutorial=true;$("tutorialModal").classList.remove("show");save()}
+function showUnderTut(){if(!S.underground.unlocked||S.underground.tutorial)return;S.underground.tutorial=true;$("tutorialModal").classList.add("show");tut=10;renderTut();save()}
+function renderTut(){let a=["1. Купи семена в магазине.","2. Нажми на пустую грядку, чтобы посадить.","3. Подожди рост.","4. Собери урожай.","5. Нажми “Продать всё”, чтобы заработать.","6. Двойное нажатие по урожаю ставит сердечко.","7. Сердечко защищает от продажи и воришки.","8. Иногда растения мутируют.","9. Звёздная пыль нужна для редких покупок.","10. Секретные растения открываются особыми условиями.","Открыто Подземелье Корней! Здесь можно выращивать подземные растения, копать шахту и добывать корневые кристаллы.","1. Купи подземную грядку.","2. Купи подземные семена.","3. Посади подземное растение.","4. Зайди в шахту и выкопай блоки.","5. Собирай корневые кристаллы.","6. Улучшай лопату.","7. Ищи артефакты."];$("tutorialText").textContent=a[tut]||"Готово";$("nextTut").textContent=(tut===9||tut>=17)?"Готово":"Дальше"}
+function closeTut(){if(tut<10)S.tutorial=true;$("tutorialModal").classList.remove("show");save()}
 
-window.game={buySeed,buyPlot,buyUpgrade,buyItem,buyDecor,buyTool,buyChestStar,preparePlotType,claimQuest,claimAch,claimDaily};
+window.game={buySeed,buyUSeed,buyPlot,buyUPlot,buyUpgrade,buyItem,buyDecor,buyTool,buyShovel,buyChestStar,preparePlotType,prepareUPlotType,claimQuest,claimAch,claimDaily};
 
 document.querySelectorAll(".close").forEach(b=>b.onclick=()=>$(b.dataset.close).classList.remove("show"));
 document.querySelectorAll("[data-shop]").forEach(b=>b.onclick=()=>{shopTab=b.dataset.shop;renderShop()});
 document.querySelectorAll("[data-inv]").forEach(b=>b.onclick=()=>{invTab=b.dataset.inv;renderInv()});
+$("gardenBtn").onclick=()=>{S.view="garden";msg("Обычный сад");render();save()};
+$("underBtn").onclick=()=>{if(!S.underground.unlocked){msg("Подземелье откроется на 6 уровне сада");sound("error");return}S.view="underground";showUnderTut();msg("Подземелье Корней");render();save()};
+$("mineBtn").onclick=()=>{if(!S.underground.unlocked){msg("Шахта откроется на 6 уровне сада");sound("error");return}S.view="mine";msg("Шахта: нажимай на блоки");render();save()};
 $("shopBtn").onclick=()=>{$("shopModal").classList.add("show");shopTab="seeds";renderShop()};
-$("invBtn").onclick=()=>{document.getElementById("bottom").scrollIntoView({block:"end"})};
 $("questBtn").onclick=()=>{$("questModal").classList.add("show");renderQuests()};
 $("achBtn").onclick=()=>{$("achModal").classList.add("show");renderAch()};
 $("colBtn").onclick=()=>{$("colModal").classList.add("show");renderCol()};
 $("secBtn").onclick=()=>{$("secModal").classList.add("show");renderSecrets()};
 $("dailyBtn").onclick=()=>{$("dailyModal").classList.add("show");renderDaily()};
 $("setBtn").onclick=()=>{$("settingsModal").classList.add("show");applySettings()};
-$("sellAll").onclick=()=>sell("all");$("sellCommon").onclick=()=>sell("common");$("sellSafe").onclick=()=>sell("safe");$("waterBtn").onclick=waterAll;$("fertBtn").onclick=()=>selectItem("fertilizer");$("unheartBtn").onclick=unheartAll;
-$("catchThief").onclick=catchThief;$("gift").onclick=openGift;$("catchStar").onclick=catchStar;
+$("sellAll").onclick=()=>sell("all");$("sellCommon").onclick=()=>sell("common");$("sellSafe").onclick=()=>sell("safe");$("waterBtn").onclick=waterAll;$("fertBtn").onclick=()=>selectItem(S.view==="underground"?"undergroundFertilizer":"fertilizer");$("unheartBtn").onclick=unheartAll;
+$("catchThief").onclick=catchThief;$("catchRootMole").onclick=catchRootMole;$("gift").onclick=openGift;$("catchStar").onclick=catchStar;
 $("exportBtn").onclick=exportSave;$("importBtn").onclick=importSave;$("newBtn").onclick=resetGame;$("saveBtn").onclick=()=>save(false);
-$("soundToggle").onclick=()=>{S.settings.sound=!S.settings.sound;applySettings();save()};$("animToggle").onclick=()=>{S.settings.anim=!S.settings.anim;applySettings();save()};$("compactToggle").onclick=()=>{S.settings.compact=!S.settings.compact;applySettings();save()};
-$("skipTut").onclick=closeTut;$("nextTut").onclick=()=>{if(tut>=9)closeTut();else{tut++;renderTut()}};
+$("soundToggle").onclick=()=>{S.settings.sound=!S.settings.sound;applySettings();save()};
+$("animToggle").onclick=()=>{S.settings.anim=!S.settings.anim;applySettings();save()};
+$("compactToggle").onclick=()=>{S.settings.compact=!S.settings.compact;applySettings();save()};
+$("skipTut").onclick=closeTut;$("nextTut").onclick=()=>{if(tut===9||tut>=17)closeTut();else{tut++;renderTut()}};
 
-load();render();showTut();
-setInterval(()=>{let now=Date.now();updateDay();S.plots.forEach(p=>{p.last=p.last||now;let dt=clamp((now-p.last)/1000,0,4);p.last=now;tick(dt)});randomBad();randomGood();maybeBoss();maybeThief();crowDamage();autoWater();clearEvents();checkAch();renderTop();renderPlots();save()},1000);
+load();checkUndergroundUnlock();render();showTut();
+setInterval(()=>{let now=Date.now();updateDay();S.plots.forEach(p=>{p.last=p.last||now;let dt=clamp((now-p.last)/1000,0,4);p.last=now;tick(dt)});S.underground.uPlots.forEach(p=>{p.last=p.last||now;let dt=clamp((now-p.last)/1000,0,4);p.last=now;tickU(dt)});if(S.underground.mineReset&&Date.now()>S.underground.mineReset)resetMine(false);randomBad();randomUBad();randomGood();maybeBoss();maybeRootBoss();maybeThief();maybeRootMole();autoWater();clearEvents();checkUndergroundUnlock();checkAch();renderTop();renderView();save()},1000);
 setInterval(()=>save(),8000);
 })();
 </script>
