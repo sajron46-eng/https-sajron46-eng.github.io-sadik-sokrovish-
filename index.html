@@ -201,7 +201,10 @@ textarea{width:100%;min-height:150px;border:2px solid #d3a53d;border-radius:14px
 <script>
 (function(){
 "use strict";
-const SAVE="sadik_sokrovishch_v12_tainy_sada";
+
+const SAVE="sadik_sokrovishch_save";
+const GAME_VERSION="1.2";
+
 const DAY_MS=120000;
 const seasons=["Весна","Лето","Осень","Зима"];
 const rarity={common:"обычное",rare:"редкое",epic:"эпическое",legendary:"легендарное",mythic:"мифическое",secret:"секретное"};
@@ -232,6 +235,7 @@ sunCarrot:{n:"Солнечная Морковь",e:"🌞",t:"single",r:"secret",
 moonBerry:{n:"Лунная Ягода",e:"🌙",t:"multi",r:"secret",lv:1,c:0,g:120,f:65,s:240,xp:50,d:"Ночью дороже.",secret:true},
 royalPumpkin:{n:"Королевская Тыква",e:"👑",t:"single",r:"secret",lv:1,c:0,g:150,s:2200,xp:100,d:"Семя Короля Сорняков.",secret:true}
 };
+
 const baseIds=Object.keys(plants).filter(id=>!plants[id].secret);
 const secretIds=Object.keys(plants).filter(id=>plants[id].secret);
 const allIds=Object.keys(plants);
@@ -255,6 +259,7 @@ const upgrades=[
 {id:"compost",n:"Магический компост",e:"🪄",c:2000,lv:9,d:"Больше шанс двойного урожая."},
 {id:"expansion",n:"Расширение сада",e:"🌳",c:2500,lv:7,d:"Открывает лимит до 20 грядок."}
 ];
+
 const decorations=[
 {id:"fountain",n:"Маленький фонтан",e:"⛲",coins:500,d:"Рост +5%."},
 {id:"path",n:"Каменная дорожка",e:"🪨",coins:350,d:"Сорняков меньше."},
@@ -264,11 +269,13 @@ const decorations=[
 {id:"starTotem",n:"Звёздный тотем",e:"🗿",dust:10,d:"Падение звезды чаще."},
 {id:"knightScarecrow",n:"Пугало-рыцарь",e:"🤺",coins:1500,d:"Вредителей меньше."}
 ];
+
 const tools=[
 {id:"shears",n:"Обычные ножницы",e:"✂️",coins:300,d:"Быстрее убирают сорняки и помогают против босса."},
 {id:"ironShears",n:"Железные ножницы",e:"⚔️",coins:900,d:"Сорняки в 1 нажатие, боссу больше урона."},
 {id:"goldShears",n:"Золотые ножницы",e:"🏆",coins:2000,dust:5,d:"Сильно помогают против босса, шанс звёздной пыли."}
 ];
+
 const plotTypes=[
 {id:"wet",n:"Влажная грядка",e:"💧",coins:300,d:"Реже сохнет."},
 {id:"gold",n:"Золотая грядка",e:"🟡",coins:700,d:"Урожай +20% к продаже."},
@@ -296,6 +303,7 @@ const questTemplates=[
 {id:"boss",text:"Победи Короля Сорняков",type:"boss",need:1,reward:{dust:3,xp:120,chest:"rare",count:1}},
 {id:"secretPlant",text:"Открой секретное растение",type:"secretPlant",need:1,reward:{dust:2,xp:90,chest:"mystery",count:1}}
 ];
+
 const achievements=[
 {id:"firstPlant",n:"Первый росток",d:"Посадить первое семечко.",reward:{coins:40,xp:20}},
 {id:"firstHarvest",n:"Первый урожай",d:"Собрать первое растение.",reward:{coins:50,xp:25}},
@@ -310,6 +318,7 @@ const achievements=[
 {id:"secretSeed",n:"Секретное семя",d:"Открыть первое секретное растение.",reward:{dust:3,xp:100}},
 {id:"legendGarden",n:"Сад легенд",d:"Открыть 5 мутаций.",reward:{dust:5,xp:200,chest:"mythic",count:1}}
 ];
+
 const secretHints=[
 ["fog","Когда сад накрывает туман, земля может измениться…","Туман открыл Призрачную Репу, Теневой Гриб и Теневую грядку."],
 ["star","Ночью иногда падают звёзды. Успей нажать.","Падение звезды даёт пыль и может открыть Кометный Огурец."],
@@ -321,7 +330,7 @@ const secretHints=[
 
 function xpNeed(lv){return Math.floor(90+lv*lv*60)}
 function emptyPlot(){return{type:"normal",plant:null,mutation:null,progress:0,ready:false,fruitProgress:0,fruitReady:false,last:Date.now(),dry:false,weeds:0,bugs:false,snail:0,crow:0,mole:0,slug:0,bee:0,sunspot:false,boss:0,mutBoost:false}}
-function defState(){return{coins:50,dust:0,level:1,xp:0,day:1,lastDay:Date.now(),seasonIndex:0,seasonDay:1,plots:[emptyPlot(),emptyPlot(),emptyPlot(),emptyPlot()],plotCount:4,seeds:{},harvest:{},heart:{},items:{fertilizer:0,superFertilizer:0,mutFertilizer:0,starWater:0,antiPest:0,moonTicket:0,secretPack:0},chests:{small:0,rare:0,gold:0,mythic:0,star:0,mystery:0,garden:0},upgrades:{},decor:{},tools:{},collection:{},mutations:{},secrets:{},secretPlants:{},quests:[],ach:{},daily:{last:"",streak:0},settings:{sound:true,anim:true,compact:false},tutorial:false,stats:{planted:0,harvested:0,sold:0,pests:0,weeds:0,thieves:0,stars:0,mutations:0,boss:0,dustTotal:0,heartKinds:{},sunEvents:0,nightEvents:0,decor:0,plotUp:0},effects:{sun:0,gold:0,fog:0,hot:0,pepper:0,star:0,antiPest:0},active:"нет"}}
+function defState(){return{gameVersion:GAME_VERSION,coins:50,dust:0,level:1,xp:0,day:1,lastDay:Date.now(),seasonIndex:0,seasonDay:1,plots:[emptyPlot(),emptyPlot(),emptyPlot(),emptyPlot()],plotCount:4,seeds:{},harvest:{},heart:{},items:{fertilizer:0,superFertilizer:0,mutFertilizer:0,starWater:0,antiPest:0,moonTicket:0,secretPack:0},chests:{small:0,rare:0,gold:0,mythic:0,star:0,mystery:0,garden:0},upgrades:{},decor:{},tools:{},collection:{},mutations:{},secrets:{},secretPlants:{},quests:[],ach:{},daily:{last:"",streak:0},settings:{sound:true,anim:true,compact:false},tutorial:false,stats:{planted:0,harvested:0,sold:0,pests:0,weeds:0,thieves:0,stars:0,mutations:0,boss:0,dustTotal:0,heartKinds:{},sunEvents:0,nightEvents:0,decor:0,plotUp:0},effects:{sun:0,gold:0,fog:0,hot:0,pepper:0,star:0,antiPest:0},active:"нет"}}
 let S=defState(),selectedSeed=null,selectedItem=null,invTab="seeds",shopTab="seeds",lastTap={id:null,time:0},thiefTimer=null,thiefLeft=5,tut=0;
 
 const $=id=>document.getElementById(id);
@@ -335,9 +344,37 @@ function basePlotPrice(){let n=S.plotCount;return n<12?80+(n-4)*65:900+(n-12)*26
 function msg(t){$("msg").textContent=t}
 function toast(t){let d=document.createElement("div");d.className="toast";d.textContent=t;$("game").appendChild(d);setTimeout(()=>d.remove(),1800)}
 function sound(t){if(!S.settings.sound)return;try{let c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain(),m={buy:650,plant:420,harvest:780,sell:900,error:150,chest:520,quest:980,level:1120,pest:120,win:1050,star:1300};o.frequency.value=m[t]||440;o.type=(t==="error"||t==="pest")?"sawtooth":"sine";g.gain.value=.045;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.14)}catch(e){}}
-function save(silent=true){try{localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}if(!silent)msg("Сохранено 💾")}
+function save(silent=true){try{S.gameVersion=GAME_VERSION;localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}if(!silent)msg("Сохранено 💾")}
 function merge(a,b){if(!b||typeof b!=="object")return a;for(let k in b){if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==="object"&&!Array.isArray(a[k]))a[k]=merge(a[k],b[k]);else a[k]=b[k]}return a}
-function load(){try{let r=localStorage.getItem(SAVE);if(r)S=merge(defState(),JSON.parse(r))}catch(e){S=defState()}while(S.plots.length<S.plotCount)S.plots.push(emptyPlot());if(!S.quests||S.quests.length<3)genQuests();applySettings()}
+function fixSaveAfterUpdate(){
+S.gameVersion=GAME_VERSION;
+if(!S.seeds)S.seeds={};
+if(!S.harvest)S.harvest={};
+if(!S.heart)S.heart={};
+if(!S.items)S.items={};
+if(!S.chests)S.chests={};
+if(!S.upgrades)S.upgrades={};
+if(!S.decor)S.decor={};
+if(!S.tools)S.tools={};
+if(!S.collection)S.collection={};
+if(!S.mutations)S.mutations={};
+if(!S.secrets)S.secrets={};
+if(!S.secretPlants)S.secretPlants={};
+if(!S.quests)S.quests=[];
+if(!S.ach)S.ach={};
+if(!S.daily)S.daily={last:"",streak:0};
+if(!S.settings)S.settings={sound:true,anim:true,compact:false};
+if(!S.stats)S.stats={};
+if(!S.effects)S.effects={};
+if(!S.plots)S.plots=[];
+if(!S.plotCount)S.plotCount=4;
+while(S.plots.length<S.plotCount)S.plots.push(emptyPlot());
+for(let i=0;i<S.plots.length;i++){
+S.plots[i]=merge(emptyPlot(),S.plots[i]);
+}
+S.plots=S.plots.slice(0,S.plotCount);
+}
+function load(){try{let r=localStorage.getItem(SAVE);if(r)S=merge(defState(),JSON.parse(r))}catch(e){S=defState()}fixSaveAfterUpdate();if(!S.quests||S.quests.length<3)genQuests();applySettings();save()}
 function addCoins(n){S.coins=Math.max(0,Math.floor(S.coins+n))}
 function addDust(n){S.dust=Math.max(0,Math.floor(S.dust+n));if(n>0){S.stats.dustTotal+=n;progressQuest("dustTotal",S.stats.dustTotal,{})}}
 function addXp(n){if(S.upgrades.gloves)n=Math.ceil(n*1.2);S.xp+=Math.max(0,Math.floor(n));while(S.xp>=xpNeed(S.level)){S.xp-=xpNeed(S.level);S.level++;addCoins(50*S.level);toast("Новый уровень сада "+S.level+"!");msg("Уровень сада повышен! Награда: "+(50*S.level)+" монет");sound("level")}checkAch()}
@@ -449,7 +486,7 @@ function autoWater(){if(!S.upgrades.autoWater)return;if(Math.random()<.012){let 
 function clearEvents(){let now=Date.now();if(now>S.effects.sun&&S.active==="Солнечный день")S.active="нет";if(now>S.effects.gold&&S.active==="Золотой час")S.active="нет";if(now>S.effects.fog&&S.active==="Туман")S.active="нет";if(now>S.effects.hot&&S.active==="Жаркий день")S.active="нет";if(now>S.effects.star&&S.active==="Падение звезды")S.active="нет"}
 
 function exportSave(){let code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("saveCode").value=code;$("saveCode").focus();$("saveCode").select();msg("Код сохранения создан")}
-function importSave(){let code=$("saveCode").value.trim();try{let obj=JSON.parse(decodeURIComponent(escape(atob(code))));if(!obj||typeof obj.coins!=="number"||!obj.plots)throw 0;S=merge(defState(),obj);save();applySettings();msg("Сохранение импортировано");render()}catch(e){msg("Неправильный код сохранения");sound("error")}}
+function importSave(){let code=$("saveCode").value.trim();try{let obj=JSON.parse(decodeURIComponent(escape(atob(code))));if(!obj||typeof obj.coins!=="number"||!obj.plots)throw 0;S=merge(defState(),obj);fixSaveAfterUpdate();save();applySettings();msg("Сохранение импортировано");render()}catch(e){msg("Неправильный код сохранения");sound("error")}}
 function resetGame(){if(confirm("Точно начать новую игру?")){localStorage.removeItem(SAVE);S=defState();genQuests();selectedSeed=null;selectedItem=null;save();applySettings();render();showTut();msg("Новая игра началась")}}
 function applySettings(){document.body.classList.toggle("noanim",!S.settings.anim);document.body.classList.toggle("compact",!!S.settings.compact);$("soundToggle").textContent=S.settings.sound?"🔊 Звук ВКЛ":"🔇 Звук ВЫКЛ";$("animToggle").textContent=S.settings.anim?"✨ Анимации ВКЛ":"🚫 Анимации ВЫКЛ";$("compactToggle").textContent=S.settings.compact?"📱 Компакт ВКЛ":"📱 Компакт ВЫКЛ"}
 function showTut(){if(S.tutorial)return;tut=0;$("tutorialModal").classList.add("show");renderTut()}
